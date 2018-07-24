@@ -1,0 +1,24 @@
+c:\users\admin\documents\visual studio 2015\Projects\DisplaySystem\DisplaySystem\bin\Debug\DisplaySystem.exe.config
+C:\Users\admin\documents\visual studio 2015\Projects\DisplaySystem\DisplaySystem\bin\Debug\DisplaySystem.exe
+C:\Users\admin\documents\visual studio 2015\Projects\DisplaySystem\DisplaySystem\bin\Debug\DisplaySystem.pdb
+C:\Users\admin\documents\visual studio 2015\Projects\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.csprojResolveAssemblyReference.cache
+C:\Users\admin\documents\visual studio 2015\Projects\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.Main.resources
+C:\Users\admin\documents\visual studio 2015\Projects\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.Properties.Resources.resources
+C:\Users\admin\documents\visual studio 2015\Projects\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.csproj.GenerateResource.Cache
+C:\Users\admin\documents\visual studio 2015\Projects\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.exe
+C:\Users\admin\documents\visual studio 2015\Projects\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.pdb
+C:\Users\admin\documents\visual studio 2015\Projects\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.Modify.ModifyPowerSupplyModel.resources
+C:\Users\admin\documents\visual studio 2015\Projects\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.ModifyTrackLine.resources
+C:\Users\admin\documents\visual studio 2015\Projects\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.Modify.ModifyTrackPoint.resources
+C:\Users\lclfy\Documents\DisplaySystem\DisplaySystem\bin\Debug\DisplaySystem.exe.config
+C:\Users\lclfy\Documents\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.exe
+C:\Users\lclfy\Documents\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.pdb
+C:\Users\lclfy\Documents\DisplaySystem\DisplaySystem\bin\Debug\DisplaySystem.exe
+C:\Users\lclfy\Documents\DisplaySystem\DisplaySystem\bin\Debug\DisplaySystem.pdb
+C:\Users\lclfy\Documents\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.csprojResolveAssemblyReference.cache
+C:\Users\lclfy\Documents\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.Main.resources
+C:\Users\lclfy\Documents\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.Modify.ModifyPowerSupplyModel.resources
+C:\Users\lclfy\Documents\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.ModifyTrackLine.resources
+C:\Users\lclfy\Documents\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.Modify.ModifyTrackPoint.resources
+C:\Users\lclfy\Documents\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.Properties.Resources.resources
+C:\Users\lclfy\Documents\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.csproj.GenerateResource.Cache

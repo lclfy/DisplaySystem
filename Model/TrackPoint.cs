@@ -9,7 +9,6 @@ namespace DisplaySystem
     public class TrackPoint : IComparable<TrackPoint> , ICloneable
     {
         public int trackPointID { get; set; }
-        //是否被供电臂所停用
         public bool function { get; set; }
         //  1定位 2反位
         public int switchDirection { get; set; }

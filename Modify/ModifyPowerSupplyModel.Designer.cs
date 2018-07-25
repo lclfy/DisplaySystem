@@ -45,6 +45,7 @@
             this.containTracks_lv = new System.Windows.Forms.ListView();
             this.trackID2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.des2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.trackInWhere = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.addTrack_btn = new System.Windows.Forms.Button();
             this.deleteTrack_btn = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
@@ -62,10 +63,9 @@
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.radioButton5 = new System.Windows.Forms.RadioButton();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.radioButton5 = new System.Windows.Forms.RadioButton();
-            this.trackInWhere = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -225,6 +225,10 @@
             // 
             this.des2.Text = "描述";
             // 
+            // trackInWhere
+            // 
+            this.trackInWhere.Text = "无电方向";
+            // 
             // addTrack_btn
             // 
             this.addTrack_btn.Location = new System.Drawing.Point(468, 945);
@@ -253,9 +257,9 @@
             this.label5.Location = new System.Drawing.Point(864, 184);
             this.label5.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(181, 29);
+            this.label5.Size = new System.Drawing.Size(210, 29);
             this.label5.TabIndex = 67;
-            this.label5.Text = "添加受影响的道岔";
+            this.label5.Text = "添加受影响道岔/信号";
             // 
             // otherPoints_lv
             // 
@@ -287,9 +291,9 @@
             this.label6.Location = new System.Drawing.Point(1076, 184);
             this.label6.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(160, 29);
+            this.label6.Size = new System.Drawing.Size(210, 29);
             this.label6.TabIndex = 69;
-            this.label6.Text = "已受影响的道岔";
+            this.label6.Text = "已受影响的道岔/信号";
             // 
             // containPoints_lv
             // 
@@ -395,6 +399,18 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "该轨道在无电区的部分";
             // 
+            // radioButton5
+            // 
+            this.radioButton5.AutoSize = true;
+            this.radioButton5.Location = new System.Drawing.Point(246, 48);
+            this.radioButton5.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.radioButton5.Name = "radioButton5";
+            this.radioButton5.Size = new System.Drawing.Size(80, 33);
+            this.radioButton5.TabIndex = 74;
+            this.radioButton5.TabStop = true;
+            this.radioButton5.Text = "右半";
+            this.radioButton5.UseVisualStyleBackColor = true;
+            // 
             // radioButton3
             // 
             this.radioButton3.AutoSize = true;
@@ -418,22 +434,6 @@
             this.radioButton4.TabStop = true;
             this.radioButton4.Text = "左半";
             this.radioButton4.UseVisualStyleBackColor = true;
-            // 
-            // radioButton5
-            // 
-            this.radioButton5.AutoSize = true;
-            this.radioButton5.Location = new System.Drawing.Point(246, 48);
-            this.radioButton5.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.radioButton5.Name = "radioButton5";
-            this.radioButton5.Size = new System.Drawing.Size(80, 33);
-            this.radioButton5.TabIndex = 74;
-            this.radioButton5.TabStop = true;
-            this.radioButton5.Text = "右半";
-            this.radioButton5.UseVisualStyleBackColor = true;
-            // 
-            // trackInWhere
-            // 
-            this.trackInWhere.Text = "无电方向";
             // 
             // ModifyPowerSupplyModel
             // 

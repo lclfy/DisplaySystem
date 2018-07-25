@@ -12,6 +12,6 @@ namespace DisplaySystem
         public bool function { get; set; }
         public List<TrackLine> containedTrackLine { get; set; }
         public List<TrackPoint> containedTrackPoint { get; set; }
-        public List<TrackPoint> fonctionalTrackPoint { get; set; }
+        public List<TrackPoint> functionalTrackPoint { get; set; }
     }
 }

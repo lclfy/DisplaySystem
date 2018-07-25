@@ -47,7 +47,7 @@
             this.modifyTrackLine_btn.Name = "modifyTrackLine_btn";
             this.modifyTrackLine_btn.Size = new System.Drawing.Size(150, 56);
             this.modifyTrackLine_btn.TabIndex = 0;
-            this.modifyTrackLine_btn.Text = "编辑轨道";
+            this.modifyTrackLine_btn.Text = "轨道";
             this.modifyTrackLine_btn.UseVisualStyleBackColor = true;
             this.modifyTrackLine_btn.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -58,7 +58,7 @@
             this.modifyTrackPoint_btn.Name = "modifyTrackPoint_btn";
             this.modifyTrackPoint_btn.Size = new System.Drawing.Size(150, 56);
             this.modifyTrackPoint_btn.TabIndex = 1;
-            this.modifyTrackPoint_btn.Text = "编辑道岔";
+            this.modifyTrackPoint_btn.Text = "道岔/信号";
             this.modifyTrackPoint_btn.UseVisualStyleBackColor = true;
             this.modifyTrackPoint_btn.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -69,7 +69,7 @@
             this.modifyPowerSupplyModel_btn.Name = "modifyPowerSupplyModel_btn";
             this.modifyPowerSupplyModel_btn.Size = new System.Drawing.Size(150, 56);
             this.modifyPowerSupplyModel_btn.TabIndex = 2;
-            this.modifyPowerSupplyModel_btn.Text = "编辑供电臂";
+            this.modifyPowerSupplyModel_btn.Text = "供电臂";
             this.modifyPowerSupplyModel_btn.UseVisualStyleBackColor = true;
             this.modifyPowerSupplyModel_btn.Click += new System.EventHandler(this.button3_Click);
             // 

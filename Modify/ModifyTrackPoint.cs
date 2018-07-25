@@ -102,10 +102,7 @@ namespace DisplaySystem.Modify
         {
             if (id_tb.Text.Length != 0 &&
                 x_tb.Text.Length != 0 &&
-                y_tb.Text.Length != 0 &&
-                p1_tb.Text.Length != 0 &&
-                p2_tb.Text.Length != 0 &&
-                p3_tb.Text.Length != 0)
+                y_tb.Text.Length != 0)
             {
 
                 try

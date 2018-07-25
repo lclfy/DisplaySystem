@@ -26,7 +26,8 @@ namespace DisplaySystem
         public List<Button> allButtons;
         Graphics graphic;
         bool pointShown = false;
-        bool shownSettings = true;
+        bool showSettings = true;
+        bool showFunctionalPoints = true;
         public string shownPowerSupplyModelName = "";
 
         public Main()
@@ -192,7 +193,7 @@ namespace DisplaySystem
 
         private void checkSettings()
         {
-            if (shownSettings)
+            if (showSettings)
             {
                 modifyPowerSupplyModel_btn.Visible = true;
                 modifyTrackLine_btn.Visible = true;
@@ -288,7 +289,17 @@ namespace DisplaySystem
         {//点击相应供电臂后绘制相应内容
             //MessageBox.Show("" + ((Button)sender).Name);
             string name = ((Button)sender).Text;
+            ((Button)sender).BackColor = Color.Red;
+            ((Button)sender).ForeColor = Color.White;
             shownPowerSupplyModelName = name;
+            foreach(Button btn in allButtons)
+            {
+                if (!btn.Text.Equals(name))
+                {
+                    btn.BackColor = Color.White;
+                    btn.ForeColor = Color.Black;
+                }
+            }
             this.Refresh();
         }
 
@@ -347,7 +358,7 @@ namespace DisplaySystem
             graphic.DrawLine(p, point1, point2);
             Font font = new Font("微软雅黑", 10.0f, FontStyle.Bold);
             //graphic.DrawString(pointText, base.Font, Brushes.White, 0, 0, new StringFormat(StringFormatFlags.DirectionVertical));
-            if(_tl.trackLineID <= 32 || true)
+            if(_tl.trackLineID <= 32 || pointShown)
             {
                 graphic.DrawString(pointText, font, Brushes.White, (point1.X + point2.X) / 2, ((point1.Y + point2.Y) / 2) - 20);
             }
@@ -358,8 +369,8 @@ namespace DisplaySystem
             //graphic.DrawString("(" + _tl.selfRightPoint.X.ToString() + ",\n" + _tl.selfRightPoint.Y.ToString() + ")", font1, Brushes.Yellow, point2.X, point2.Y - 30);
         }
 
-        private void paintPoint(TrackPoint _tp)
-        {
+        private void paintPoint(TrackPoint _tp, bool isOnShow = false)
+        {//isOnShow为该点是否应该高亮展示
             if(_tp == null)
             {
                 return;
@@ -369,14 +380,30 @@ namespace DisplaySystem
                 return;
             }
             Point point = _tp.trackPoint;
-            int lineText = _tp.trackPointID;
-            Pen p = new Pen(Color.Red, 8);
-            graphic.DrawLine(p, new Point(point.X - 4, point.Y), new Point(point.X +4, point.Y));
             Font font = new Font("微软雅黑", 10.0f, FontStyle.Bold);
             Font fontPoint = new Font("微软雅黑", 7.0f, FontStyle.Bold);
-            
+            int lineText = _tp.trackPointID;
+            Pen p;
+            if (isOnShow && showFunctionalPoints)
+            {
+                p = new Pen(Color.Red, 10);
+                graphic.DrawLine(p, new Point(point.X - 5, point.Y), new Point(point.X + 5, point.Y));
+                if (_tp.switchDirection == 1)
+                {
+                    graphic.DrawString("单锁定位", font, Brushes.Yellow, point.X - 10, point.Y - 30);
+                }
+                else if (_tp.switchDirection == 2)
+                {
+                    graphic.DrawString("单锁反位", font, Brushes.Yellow, point.X, point.Y - 30);
+                }
+            }
+            else
+            {
+                p = new Pen(Color.Green, 8);
+                graphic.DrawLine(p, new Point(point.X - 4, point.Y), new Point(point.X + 4, point.Y));
+            }
             graphic.DrawString(lineText.ToString(), font, Brushes.White, point.X, point.Y - 20);
-            if (pointShown)
+            if (pointShown && !isOnShow)
             {
                 graphic.DrawString("(" +point.X.ToString() + "," + point.Y.ToString() + ")", fontPoint, Brushes.Yellow, point.X, point.Y - 30);
             }
@@ -431,6 +458,7 @@ namespace DisplaySystem
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            //showFunctionalPoints = !showFunctionalPoints;
             this.Refresh();
         }
 
@@ -462,6 +490,10 @@ namespace DisplaySystem
                 if (_ps.powerSupplyName.Equals(shownPowerSupplyModelName))
                 {
                     paintPowerSupply(_ps);
+                    foreach(TrackPoint _tp in _ps.containedTrackPoint)
+                    {
+                        paintPoint(_tp, true);
+                    }
                 }
             }
             
@@ -537,16 +569,8 @@ namespace DisplaySystem
 
         private void button4_Click(object sender, EventArgs e)
         {
-            if (shownSettings)
-            {
-                shownSettings = false;
-                checkSettings();
-            }
-            else
-            {
-                shownSettings = true;
-                checkSettings();
-            }
+            showSettings = !showSettings;
+            checkSettings();
         }
     }
 }

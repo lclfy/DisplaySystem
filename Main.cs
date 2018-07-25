@@ -624,7 +624,11 @@ namespace DisplaySystem
             foreach (Button btn in allButtons)
             {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 btn.Location = new Point((this.Width - 170*allButtons.Count)/2 + 170 * count, this.Height-(int)(this.Height*0.2));
+=======
+                btn.Location = new Point(400 + 170 * count, this.Height - 200);
+>>>>>>> parent of dd922a0... 0725B8
 =======
                 btn.Location = new Point(400 + 170 * count, this.Height - 200);
 >>>>>>> parent of dd922a0... 0725B8

@@ -9,7 +9,7 @@ namespace DisplaySystem.Model
     {
         public string title { get; set; }
         public List<TrackLine> tLine { get; set; }
-        public List<TrackPointAndSignal> tPoint { get; set; }
+        public List<TrackPoint> tPoint { get; set; }
         public List<PowerSupplyModel> psModel { get; set; }
     }
 }

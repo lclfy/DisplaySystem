@@ -24,7 +24,6 @@ namespace DisplaySystem
         public List<PowerSupplyModel> psModel;
         public List<TrackLine> tLine;
         public List<TrackPoint> tPoint;
-        public List<TrackPointAndSignal> tPoint1;
         public List<Button> allButtons;
         Graphics graphic;
         bool pointShown = false;
@@ -50,19 +49,6 @@ namespace DisplaySystem
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
             this.UpdateStyles();
             this.AutoScrollMinSize = new Size(1920, 1080);
-            tPoint1 = new List<TrackPointAndSignal>();
-            foreach(TrackPoint _tp in tPoint)
-            {
-                TrackPointAndSignal _tS = new TrackPointAndSignal();
-                _tS.trackPointID = _tp.trackPointID.ToString();
-                _tS.trackPoint = _tp.trackPoint;
-                _tS.switchDirection = _tp.switchDirection;
-                _tS.function = _tp.function;
-                _tS.firstTrackLine = _tp.firstTrackLine;
-                _tS.secondTrackLine = _tp.secondTrackLine;
-                _tS.thirdTrackLine = _tp.thirdTrackLine;
-                tPoint1.Add(_tS);
-            }
         }
 
         private void checkResolution()
@@ -247,29 +233,48 @@ namespace DisplaySystem
         private void loadData()
         {
             IFormatter formatter = new BinaryFormatter();
+            ModelData _data = new ModelData();
             try
             {
                 Stream stream = new FileStream(Application.StartupPath + "\\Data\\modelData.bin", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                ModelData _data = (ModelData)formatter.Deserialize(stream);
+                _data = (ModelData)formatter.Deserialize(stream);
                 stream.Close();
-                tLine = _data.tLine;
-                tPoint1 = _data.tPoint;
-                psModel = _data.psModel;
-                if(_data.title != null)
-                {
-                    title_tb.Text = _data.title;
-                    title_lbl.Text = _data.title;
-                }
-                tLine.Sort();
-                tPoint.Sort();
             }
             catch (Exception e)
             {
-                //MessageBox.Show("数据损坏或未放入指定数据文件","提示",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+
+            }
+            try
+            {
+                tPoint = _data.tPoint;
+            }
+            catch(Exception e)
+            {
                 tPoint = new List<TrackPoint>();
+            }
+            try
+            {
+                psModel = _data.psModel;
+            }
+            catch(Exception e)
+            {
                 psModel = new List<PowerSupplyModel>();
+            }
+            try
+            {
+                tLine = _data.tLine;
+            }
+            catch (Exception e)
+            {
                 tLine = new List<TrackLine>();
             }
+            if (_data.title != null)
+            {
+                title_tb.Text = _data.title;
+                title_lbl.Text = _data.title;
+            }
+            tLine.Sort();
+            tPoint.Sort();
             if (false)
             {
                 try
@@ -385,7 +390,7 @@ namespace DisplaySystem
         {
             ModelData _dt = new ModelData();
             _dt.tLine = this.tLine;
-            _dt.tPoint = this.tPoint1;
+            _dt.tPoint = this.tPoint;
             _dt.psModel = this.psModel;
             _dt.title = title_lbl.Text;
             
@@ -395,9 +400,6 @@ namespace DisplaySystem
                 Stream stream = new FileStream(Application.StartupPath + "\\Data\\modelData.bin", FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
                 formatter.Serialize(stream, _dt);
                 stream.Close();
-                Stream streamPoint = new FileStream(Application.StartupPath + "\\Data\\tPointAndSignal.bin", FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
-                formatter.Serialize(streamPoint, tPoint1);
-                streamPoint.Close();
                 /*
                 Stream streamLine = new FileStream(Application.StartupPath + "\\Data\\tLine.bin", FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
                 formatter.Serialize(streamLine, tLine);

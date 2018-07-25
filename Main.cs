@@ -15,6 +15,7 @@ using DisplaySystem.Modify;
 using System.Runtime.Serialization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using DisplaySystem.Model;
 
 namespace DisplaySystem
 {
@@ -24,6 +25,7 @@ namespace DisplaySystem
         public List<TrackLine> tLine;
         public List<TrackPoint> tPoint;
         public List<Button> allButtons;
+        ModelData data;
         Graphics graphic;
         bool pointShown = false;
         bool showSettings = true;
@@ -216,13 +218,34 @@ namespace DisplaySystem
             IFormatter formatter = new BinaryFormatter();
             try
             {
+                Stream stream = new FileStream(Application.StartupPath + "\\Data\\modelData.bin", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                ModelData _data = (ModelData)formatter.Deserialize(stream);
+                stream.Close();
+                tLine = _data.tLine;
+                tPoint = _data.tPoint;
+                psModel = _data.psModel;
+                tLine.Sort();
+                tPoint.Sort();
+            }
+            catch (Exception e)
+            {
+                //MessageBox.Show("数据损坏或未放入指定数据文件","提示",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+                data = new ModelData();
+                tPoint = new List<TrackPoint>();
+                psModel = new List<PowerSupplyModel>();
+                tLine = new List<TrackLine>();
+            }
+            /*
+            try
+            {
                 Stream streamLine = new FileStream(Application.StartupPath + "\\Data\\tLine.bin", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 tLine = (List<TrackLine>)formatter.Deserialize(streamLine);
                 streamLine.Close();
                 tLine.Sort();
-            }catch(Exception e)
+            }
+            catch (Exception e1)
             {
-                tLine = new List<TrackLine>();
+                tPoint = new List<TrackPoint>();
             }
             try
             {
@@ -243,6 +266,8 @@ namespace DisplaySystem
             {
                 psModel = new List<PowerSupplyModel>();
             }
+            */
+            
         }
         
         private void createButtons()
@@ -320,9 +345,17 @@ namespace DisplaySystem
 
         private bool saveData(string saveText = "")
         {
+            ModelData _dt = new ModelData();
+            _dt.tLine = this.tLine;
+            _dt.tPoint = this.tPoint;
+            _dt.psModel = this.psModel;
             try
             {
                 IFormatter formatter = new BinaryFormatter();
+                Stream stream = new FileStream(Application.StartupPath + "\\Data\\modelData.bin", FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
+                formatter.Serialize(stream, _dt);
+                stream.Close();
+                /*
                 Stream streamLine = new FileStream(Application.StartupPath + "\\Data\\tLine.bin", FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
                 formatter.Serialize(streamLine, tLine);
                 streamLine.Close();
@@ -332,6 +365,7 @@ namespace DisplaySystem
                 Stream streamPS = new FileStream(Application.StartupPath + "\\Data\\psModel.bin", FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
                 formatter.Serialize(streamPS, psModel);
                 streamPS.Close();
+                */
                 return true;
             }catch(Exception e)
             {

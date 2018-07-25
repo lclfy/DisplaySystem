@@ -133,6 +133,7 @@ namespace DisplaySystem.Modify
                         _tp.thirdTrackLine = int.Parse(p3_tb.Text.ToString());
                         tPoint.RemoveAt(TrackPointListView.SelectedItems[0].Index);
                         tPoint.Add(_tp);
+                        tPoint.Sort();
                         initUI();
                     }
                 }
@@ -237,6 +238,7 @@ namespace DisplaySystem.Modify
             if(TrackPointListView.SelectedItems.Count != 0)
             {
                 tPoint.RemoveAt(TrackPointListView.SelectedItems[0].Index);
+                tPoint.Sort();
                 initUI();
                 removeText();
             }

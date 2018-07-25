@@ -152,6 +152,7 @@ namespace DisplaySystem
                         tLine.RemoveAt(TrackLine_lv.SelectedItems[0].Index);
                     }
                     tLine.Add(_tl);
+                    tLine.Sort();
                     removeText();
                     initUI();
                 }
@@ -186,6 +187,7 @@ namespace DisplaySystem
             {
                 removeText();
                 tLine.RemoveAt(TrackLine_lv.SelectedItems[0].Index);
+                tLine.Sort();
                 initUI();
             }
         }

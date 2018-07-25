@@ -272,10 +272,13 @@ namespace DisplaySystem
             Pen p = new Pen(Color.White, 3);
             graphic.DrawLine(p, point1, point2);
             Font font = new Font("微软雅黑", 10.0f, FontStyle.Bold);
+            //graphic.DrawString(pointText, base.Font, Brushes.White, 0, 0, new StringFormat(StringFormatFlags.DirectionVertical));
             graphic.DrawString(pointText, font, Brushes.White, (point1.X + point2.X)/2, ((point1.Y + point2.Y) /2)-20);
-            Font font1 = new Font("微软雅黑", 7.0f, FontStyle.Bold);
-            graphic.DrawString(_tl.selfLeftPoint.ToString(), font1, Brushes.Yellow, point1.X , point1.Y - 20);
-            graphic.DrawString(_tl.selfRightPoint.ToString(), font1, Brushes.Yellow, point2.X, point2.Y - 20);
+            Font font1 = new Font("微软雅黑", 8.0f, FontStyle.Bold);
+            //graphic.DrawString(_tl.selfLeftPoint.ToString(), font1, Brushes.Yellow, point1.X, point1.Y - 20, new StringFormat(StringFormatFlags.DirectionVertical));
+            //graphic.DrawString(_tl.selfRightPoint.ToString(), font1, Brushes.Yellow, point2.X, point2.Y - 20, new StringFormat(StringFormatFlags.DirectionVertical));
+             graphic.DrawString("("+_tl.selfLeftPoint.X.ToString()+",\n"+ _tl.selfLeftPoint.Y.ToString()+")", font1, Brushes.Yellow, point1.X , point1.Y - 30);
+            graphic.DrawString("(" + _tl.selfRightPoint.X.ToString() + ",\n" + _tl.selfRightPoint.Y.ToString() + ")", font1, Brushes.Yellow, point2.X, point2.Y - 30);
         }
 
         private void paintPoint(TrackPoint _tp)
@@ -294,6 +297,53 @@ namespace DisplaySystem
             graphic.DrawLine(p, new Point(point.X - 4, point.Y), new Point(point.X +4, point.Y));
             Font font = new Font("微软雅黑", 10.0f, FontStyle.Bold);
             graphic.DrawString(lineText.ToString(), font, Brushes.White, point.X, point.Y - 20);
+        }
+
+        private void paintPowerSupply(PowerSupplyModel _ps)
+        {
+            if (_ps == null)
+            {
+                return;
+            }
+            else if (_ps.containedTrackLine == null)
+            {
+                return;
+            }
+            Pen p = new Pen(Color.Red, 8);
+            foreach(TrackLine _tl in _ps.containedTrackLine)
+            {
+                Point[] sbxAll = new Point[]{
+                new Point(_tl.selfLeftPoint.X, _tl.selfLeftPoint.Y + 15),
+                new Point(_tl.selfRightPoint.X, _tl.selfRightPoint.Y + 15),
+               new Point(_tl.selfRightPoint.X, _tl.selfRightPoint.Y - 15),
+                new Point(_tl.selfLeftPoint.X, _tl.selfLeftPoint.Y - 15)
+                };
+                Point[] sbxLeftIn = new Point[]{
+                new Point(_tl.selfLeftPoint.X, _tl.selfLeftPoint.Y + 15),
+                new Point((_tl.selfRightPoint.X + _tl.selfLeftPoint.X)/2, (_tl.selfLeftPoint.Y+_tl.selfRightPoint.Y)/2 + 15),
+                new Point((_tl.selfRightPoint.X + _tl.selfLeftPoint.X)/2, (_tl.selfLeftPoint.Y+_tl.selfRightPoint.Y)/2 - 15),
+                new Point(_tl.selfLeftPoint.X, _tl.selfLeftPoint.Y - 15)
+                };
+                Point[] sbxRightIn = new Point[]{
+                new Point((_tl.selfRightPoint.X + _tl.selfLeftPoint.X)/2, (_tl.selfLeftPoint.Y+_tl.selfRightPoint.Y)/2 + 15),
+                new Point(_tl.selfRightPoint.X, _tl.selfRightPoint.Y + 15),
+                new Point(_tl.selfRightPoint.X, _tl.selfRightPoint.Y - 15),
+                new Point((_tl.selfRightPoint.X + _tl.selfLeftPoint.X)/2, (_tl.selfLeftPoint.Y+_tl.selfRightPoint.Y)/2 - 15)
+                };
+                if (_tl.containsInPS == 0)
+                {//绘制全部区域(上15，下15)
+                    graphic.FillPolygon(new SolidBrush(Color.FromArgb(125, Color.LightYellow)), sbxAll);
+                }else if(_tl.containsInPS == 1)
+                {//绘制左半在内
+                    graphic.FillPolygon(new SolidBrush(Color.FromArgb(125, Color.LightYellow)), sbxLeftIn);
+                }
+                else if (_tl.containsInPS == 2)
+                {//绘制右半在内
+                    graphic.FillPolygon(new SolidBrush(Color.FromArgb(125, Color.LightYellow)), sbxRightIn);
+                }
+
+            }
+            Font font = new Font("微软雅黑", 10.0f, FontStyle.Bold);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -323,6 +373,10 @@ namespace DisplaySystem
             foreach (TrackPoint _tp in tPoint)
             {
                 paintPoint(_tp);
+            }
+            foreach(PowerSupplyModel _ps in psModel)
+            {
+                paintPowerSupply(_ps);
             }
             
         }

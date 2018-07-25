@@ -28,6 +28,7 @@ namespace DisplaySystem.Modify
         {
             initUI(false);
             radioButton1.Checked = true;
+            radioButton3.Checked = true;
         }
 
         private void initUI(bool refreshMode)
@@ -101,6 +102,16 @@ namespace DisplaySystem.Modify
                 {
                     ListViewItem lvi_Line = new ListViewItem(_tl.trackLineID.ToString());
                     lvi_Line.SubItems.Add(_tl.trackText.ToString());
+                    if(_tl.containsInPS == 0)
+                    {
+                        lvi_Line.SubItems.Add("全部");
+                    }else if(_tl.containsInPS == 1)
+                    {
+                        lvi_Line.SubItems.Add("左半");
+                    }else if(_tl.containsInPS == 2)
+                    {
+                        lvi_Line.SubItems.Add("右半");
+                    }
                     bool hasGotIt = false;
                     for (int ij = 0; ij < tLine.Count; ij++)
                     {
@@ -185,7 +196,17 @@ namespace DisplaySystem.Modify
                     {
                         foreach (ListViewItem lvi in containTracks_lv.Items)
                         {
-                            TrackLine _tline = tLine[int.Parse(lvi.SubItems[2].Text)];
+                            TrackLine _tline = tLine[int.Parse(lvi.SubItems[3].Text)];
+                            if (lvi.SubItems[2].Text.Contains("全部"))
+                            {
+                                _tline.containsInPS = 0;
+                            }else if (lvi.SubItems[2].Text.Contains("左"))
+                            {
+                                _tline.containsInPS = 1;
+                            }else if (lvi.SubItems[2].Text.Contains("右"))
+                            {
+                                _tline.containsInPS = 2;
+                            }
                             _tlList.Add(_tline);
                         }
                     }
@@ -198,11 +219,13 @@ namespace DisplaySystem.Modify
                     psModel.Add(_psModel);
                     initUI(true);
                     removeText();
+                
                 }
                 catch (Exception e1)
                 {
                     MessageBox.Show(e1.ToString().Split('。')[0] + "。", "错误", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
+                
 
             }
             else
@@ -232,6 +255,20 @@ namespace DisplaySystem.Modify
             {
                 ListViewItem lvi = new ListViewItem(otherTracks_lv.SelectedItems[0].SubItems[0].Text);
                 lvi.SubItems.Add(otherTracks_lv.SelectedItems[0].SubItems[1].Text);
+                if (radioButton3.Checked)
+                {
+                    lvi.SubItems.Add("全部");
+                }else if (radioButton4.Checked)
+                {
+                    lvi.SubItems.Add("左半");
+                }else if (radioButton5.Checked)
+                {
+                    lvi.SubItems.Add("右半");
+                }
+                else
+                {
+                    lvi.SubItems.Add("");
+                }
                 lvi.SubItems.Add(otherTracks_lv.SelectedItems[0].Index.ToString());
                 containTracks_lv.Items.Add(lvi);
                 containTracks_lv.Update();
@@ -292,6 +329,11 @@ namespace DisplaySystem.Modify
                 removeText();
                 initUI(true);
             }
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

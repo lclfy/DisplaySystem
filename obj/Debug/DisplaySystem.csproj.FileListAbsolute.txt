@@ -22,3 +22,15 @@ C:\Users\lclfy\Documents\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.Mod
 C:\Users\lclfy\Documents\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.Modify.ModifyTrackPoint.resources
 C:\Users\lclfy\Documents\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.Properties.Resources.resources
 C:\Users\lclfy\Documents\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.csproj.GenerateResource.Cache
+D:\ZRC\DisplaySystem\DisplaySystem\bin\Debug\DisplaySystem.exe.config
+D:\ZRC\DisplaySystem\DisplaySystem\bin\Debug\DisplaySystem.exe
+D:\ZRC\DisplaySystem\DisplaySystem\bin\Debug\DisplaySystem.pdb
+D:\ZRC\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.csprojResolveAssemblyReference.cache
+D:\ZRC\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.Main.resources
+D:\ZRC\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.Modify.ModifyPowerSupplyModel.resources
+D:\ZRC\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.ModifyTrackLine.resources
+D:\ZRC\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.Modify.ModifyTrackPoint.resources
+D:\ZRC\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.Properties.Resources.resources
+D:\ZRC\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.csproj.GenerateResource.Cache
+D:\ZRC\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.exe
+D:\ZRC\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.pdb

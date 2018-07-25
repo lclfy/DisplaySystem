@@ -24,6 +24,7 @@ namespace DisplaySystem
         public List<TrackLine> tLine;
         public List<TrackPoint> tPoint;
         Graphics graphic;
+        bool pointShown = false;
 
         public Main()
         {
@@ -34,6 +35,7 @@ namespace DisplaySystem
         private void Form1_Load(object sender, EventArgs e)
         {
             checkEmptyObject();
+            createButtons();
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
             this.UpdateStyles();
         }
@@ -217,6 +219,42 @@ namespace DisplaySystem
                 psModel = new List<PowerSupplyModel>();
             }
         }
+        
+        private void createButtons()
+        {
+            foreach(PowerSupplyModel _ps in psModel)
+            {
+                Button btn = new Button();
+                btn.Parent = buttons_pnl;
+                btn.Size = new Size(100,60);
+                btn.Location = new Point(0, 0);
+                btn.BackColor = Color.White;
+                btn.Name = _ps.powerSupplyID.ToString();
+                btn.Text = _ps.powerSupplyName;
+                btn.Click += new EventHandler(btn_Click);
+                buttons_pnl.Controls.Add(btn);
+            }
+
+        }
+
+        void btn_Click(object sender, EventArgs e)
+        {
+            //MessageBox.Show("" + ((Button)sender).Name);
+            string name = ((Button)sender).Name;
+            switch (name)
+            {
+                case "btn":
+                    //btn0处理代码
+                    break;
+                case "btn1":
+                    //处理代码
+                    break;
+                case "btn2":
+                    //处理代码
+                    break;
+                    //继续添加
+            }
+        }
 
         protected override void OnClosing(CancelEventArgs e)
         {
@@ -273,12 +311,15 @@ namespace DisplaySystem
             graphic.DrawLine(p, point1, point2);
             Font font = new Font("微软雅黑", 10.0f, FontStyle.Bold);
             //graphic.DrawString(pointText, base.Font, Brushes.White, 0, 0, new StringFormat(StringFormatFlags.DirectionVertical));
-            graphic.DrawString(pointText, font, Brushes.White, (point1.X + point2.X)/2, ((point1.Y + point2.Y) /2)-20);
+            if(_tl.trackLineID <= 32 || true)
+            {
+                graphic.DrawString(pointText, font, Brushes.White, (point1.X + point2.X) / 2, ((point1.Y + point2.Y) / 2) - 20);
+            }
             Font font1 = new Font("微软雅黑", 8.0f, FontStyle.Bold);
             //graphic.DrawString(_tl.selfLeftPoint.ToString(), font1, Brushes.Yellow, point1.X, point1.Y - 20, new StringFormat(StringFormatFlags.DirectionVertical));
             //graphic.DrawString(_tl.selfRightPoint.ToString(), font1, Brushes.Yellow, point2.X, point2.Y - 20, new StringFormat(StringFormatFlags.DirectionVertical));
-             graphic.DrawString("("+_tl.selfLeftPoint.X.ToString()+",\n"+ _tl.selfLeftPoint.Y.ToString()+")", font1, Brushes.Yellow, point1.X , point1.Y - 30);
-            graphic.DrawString("(" + _tl.selfRightPoint.X.ToString() + ",\n" + _tl.selfRightPoint.Y.ToString() + ")", font1, Brushes.Yellow, point2.X, point2.Y - 30);
+             //graphic.DrawString("("+_tl.selfLeftPoint.X.ToString()+",\n"+ _tl.selfLeftPoint.Y.ToString()+")", font1, Brushes.Yellow, point1.X , point1.Y - 30);
+            //graphic.DrawString("(" + _tl.selfRightPoint.X.ToString() + ",\n" + _tl.selfRightPoint.Y.ToString() + ")", font1, Brushes.Yellow, point2.X, point2.Y - 30);
         }
 
         private void paintPoint(TrackPoint _tp)
@@ -296,7 +337,12 @@ namespace DisplaySystem
             Pen p = new Pen(Color.Red, 8);
             graphic.DrawLine(p, new Point(point.X - 4, point.Y), new Point(point.X +4, point.Y));
             Font font = new Font("微软雅黑", 10.0f, FontStyle.Bold);
+            Font fontPoint = new Font("微软雅黑", 7.0f, FontStyle.Bold);
             graphic.DrawString(lineText.ToString(), font, Brushes.White, point.X, point.Y - 20);
+            if (pointShown)
+            {
+                graphic.DrawString("(" +point.X.ToString() + "," + point.Y.ToString() + ")", fontPoint, Brushes.Yellow, point.X, point.Y - 30);
+            }
         }
 
         private void paintPowerSupply(PowerSupplyModel _ps)
@@ -419,6 +465,20 @@ namespace DisplaySystem
         private void timer2_Tick(object sender, EventArgs e)
         {
             saveData("自动");
+        }
+
+        private void showPoint_btn_Click(object sender, EventArgs e)
+        {
+            if (!pointShown)
+            {
+                pointShown = true;
+                this.Refresh();
+            }
+            else
+            {
+                pointShown = false;
+                this.Refresh();
+            }
         }
     }
 }

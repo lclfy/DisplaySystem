@@ -178,7 +178,8 @@ namespace DisplaySystem.Modify
                     {
                         foreach(ListViewItem lvi in containPoints_lv.Items)
                         {
-                            TrackPoint _tp = tPoint[int.Parse(lvi.SubItems[3].Text)];
+                            TrackPoint _tp = new TrackPoint();
+                               _tp = tPoint[int.Parse(lvi.SubItems[3].Text)];
                             if(lvi.SubItems[2] != null)
                             {
                                 if (lvi.SubItems[2].Text.Contains("定"))
@@ -196,7 +197,8 @@ namespace DisplaySystem.Modify
                     {
                         foreach (ListViewItem lvi in containTracks_lv.Items)
                         {
-                            TrackLine _tline = tLine[int.Parse(lvi.SubItems[3].Text)];
+                            TrackLine _tline = new TrackLine();
+                              _tline =  tLine[int.Parse(lvi.SubItems[3].Text)];
                             if (lvi.SubItems[2].Text.Contains("全部"))
                             {
                                 _tline.containsInPS = 0;

@@ -130,6 +130,7 @@
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Main_Paint);
+            this.Resize += new System.EventHandler(this.Main_Resize);
             this.ResumeLayout(false);
 
         }

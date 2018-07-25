@@ -23,8 +23,10 @@ namespace DisplaySystem
         public List<PowerSupplyModel> psModel;
         public List<TrackLine> tLine;
         public List<TrackPoint> tPoint;
+        public List<Button> allButtons;
         Graphics graphic;
         bool pointShown = false;
+        public string shownPowerSupplyModelName = "";
 
         public Main()
         {
@@ -222,38 +224,32 @@ namespace DisplaySystem
         
         private void createButtons()
         {
+            allButtons = new List<Button>();
+            int count = 0;
             foreach(PowerSupplyModel _ps in psModel)
             {
                 Button btn = new Button();
                 btn.Parent = buttons_pnl;
-                btn.Size = new Size(100,60);
-                btn.Location = new Point(0, 0);
+                btn.Size = new Size(150,80);
+                btn.Location = new Point(400 + 170*count, this.Height - 200);
                 btn.BackColor = Color.White;
                 btn.Name = _ps.powerSupplyID.ToString();
                 btn.Text = _ps.powerSupplyName;
+                btn.Font = new Font("微软雅黑", 12.0f, FontStyle.Bold);
                 btn.Click += new EventHandler(btn_Click);
-                buttons_pnl.Controls.Add(btn);
+                this.Controls.Add(btn);
+                allButtons.Add(btn);
+                count++;
             }
 
         }
 
         void btn_Click(object sender, EventArgs e)
-        {
+        {//点击相应供电臂后绘制相应内容
             //MessageBox.Show("" + ((Button)sender).Name);
-            string name = ((Button)sender).Name;
-            switch (name)
-            {
-                case "btn":
-                    //btn0处理代码
-                    break;
-                case "btn1":
-                    //处理代码
-                    break;
-                case "btn2":
-                    //处理代码
-                    break;
-                    //继续添加
-            }
+            string name = ((Button)sender).Text;
+            shownPowerSupplyModelName = name;
+            this.Refresh();
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -422,7 +418,10 @@ namespace DisplaySystem
             }
             foreach(PowerSupplyModel _ps in psModel)
             {
-                paintPowerSupply(_ps);
+                if (_ps.powerSupplyName.Equals(shownPowerSupplyModelName))
+                {
+                    paintPowerSupply(_ps);
+                }
             }
             
         }
@@ -478,6 +477,20 @@ namespace DisplaySystem
             {
                 pointShown = false;
                 this.Refresh();
+            }
+        }
+
+        private void Main_Resize(object sender, EventArgs e)
+        {
+            int count = 0;
+            if(allButtons == null)
+            {
+                return;
+            }
+            foreach(Button btn in allButtons)
+            {
+                btn.Location = btn.Location = new Point(400 + 170 * count, this.Height - 200);
+                count++;
             }
         }
     }

@@ -6,7 +6,7 @@ using System.Drawing;
 namespace DisplaySystem
 {
     [Serializable()]
-    public class TrackPoint : IComparable<TrackPoint>
+    public class TrackPoint : IComparable<TrackPoint> , ICloneable
     {
         public int trackPointID { get; set; }
         //是否被供电臂所停用
@@ -28,6 +28,19 @@ namespace DisplaySystem
             }
             return this.trackPointID.CompareTo(other.trackPointID);//升序
             //return other.trackPointID.CompareTo(this.trackPointID);//降序
+        }
+
+        public object Clone()
+        {
+            TrackPoint _tp = new TrackPoint();
+            _tp.trackPointID = trackPointID;
+            _tp.function = function;
+            _tp.switchDirection = switchDirection;
+            _tp.trackPoint = trackPoint;
+            _tp.firstTrackLine = firstTrackLine;
+            _tp.secondTrackLine = secondTrackLine;
+            _tp.thirdTrackLine = thirdTrackLine;
+               return _tp  as object;//深复制
         }
     }
 }

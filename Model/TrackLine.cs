@@ -6,7 +6,7 @@ using System.Drawing;
 namespace DisplaySystem
 {
     [Serializable()]
-    public class TrackLine : IComparable<TrackLine>
+    public class TrackLine : IComparable<TrackLine>, ICloneable
     {
         public int trackLineID { get; set; }
         public string trackText { get; set; }
@@ -26,6 +26,20 @@ namespace DisplaySystem
             }
             return this.trackLineID.CompareTo(other.trackLineID);//升序
             //return other.trackLineID.CompareTo(this.trackLineID);//降序
+        }
+
+        public object Clone()
+        {
+            TrackLine _tl = new TrackLine();
+            _tl.trackLineID = this.trackLineID;
+            _tl.trackText = this.trackText;
+            _tl.selfLeftPoint = this.selfLeftPoint;
+            _tl.selfRightPoint = this.selfRightPoint;
+            _tl.leftTrackPoint = this.leftTrackPoint;
+            _tl.rightTrackPoint = this.rightTrackPoint;
+            _tl.containsInPS = this.containsInPS;
+
+            return _tl  as object;//深复制
         }
     }
 }

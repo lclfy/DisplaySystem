@@ -98,8 +98,9 @@ namespace DisplaySystem.Modify
                         containPoints_lv.Items.Add(lvi_Point);
                     }
                 }
-                foreach (TrackLine _tl in _psModel.containedTrackLine)
+                for(int i = 0; i< _psModel.containedTrackLine.Count; i++)
                 {
+                    TrackLine _tl = (TrackLine)_psModel.containedTrackLine[i];
                     ListViewItem lvi_Line = new ListViewItem(_tl.trackLineID.ToString());
                     lvi_Line.SubItems.Add(_tl.trackText.ToString());
                     if(_tl.containsInPS == 0)
@@ -151,6 +152,7 @@ namespace DisplaySystem.Modify
         void ModifyPowerSupplyModel_FormClosing(object sender, FormClosingEventArgs e)
         {
             main.psModel = this.psModel;
+            main.refreshButtons();
             main.Refresh();
         }
 
@@ -179,7 +181,7 @@ namespace DisplaySystem.Modify
                         foreach(ListViewItem lvi in containPoints_lv.Items)
                         {
                             TrackPoint _tp = new TrackPoint();
-                               _tp = tPoint[int.Parse(lvi.SubItems[3].Text)];
+                            _tp = (TrackPoint)tPoint[int.Parse(lvi.SubItems[3].Text)].Clone();
                             if(lvi.SubItems[2] != null)
                             {
                                 if (lvi.SubItems[2].Text.Contains("定"))
@@ -198,7 +200,7 @@ namespace DisplaySystem.Modify
                         foreach (ListViewItem lvi in containTracks_lv.Items)
                         {
                             TrackLine _tline = new TrackLine();
-                              _tline =  tLine[int.Parse(lvi.SubItems[3].Text)];
+                            _tline = (TrackLine)tLine[int.Parse(lvi.SubItems[3].Text)].Clone();
                             if (lvi.SubItems[2].Text.Contains("全部"))
                             {
                                 _tline.containsInPS = 0;
@@ -298,11 +300,12 @@ namespace DisplaySystem.Modify
 
         private void deleteTrack_btn_Click(object sender, EventArgs e)
         {
-            if(containTracks_lv.SelectedItems.Count != 0)
-            {
-                containTracks_lv.Items.RemoveAt(containTracks_lv.SelectedItems[0].Index);
-                containTracks_lv.Update();
-            }
+
+                if (containTracks_lv.SelectedItems.Count != 0)
+                {
+                    containTracks_lv.Items.RemoveAt(containTracks_lv.SelectedItems[0].Index);
+                    containTracks_lv.Update();
+                }
         }
 
         private void deletePoint_btn_Click(object sender, EventArgs e)
@@ -325,11 +328,15 @@ namespace DisplaySystem.Modify
 
         private void delete_btn_Click(object sender, EventArgs e)
         {
-            if(ps_lv.SelectedItems.Count != 0)
+            if (ps_lv.SelectedItems.Count != 0)
             {
-                psModel.RemoveAt(ps_lv.SelectedItems[0].Index);
-                removeText();
-                initUI(true);
+                if (MessageBox.Show("是否删除?", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+
+                    psModel.RemoveAt(ps_lv.SelectedItems[0].Index);
+                    removeText();
+                    initUI(true);
+                }
             }
         }
 

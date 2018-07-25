@@ -26,6 +26,7 @@ namespace DisplaySystem
         public List<Button> allButtons;
         Graphics graphic;
         bool pointShown = false;
+        bool shownSettings = true;
         public string shownPowerSupplyModelName = "";
 
         public Main()
@@ -38,6 +39,7 @@ namespace DisplaySystem
         {
             checkEmptyObject();
             createButtons();
+            checkSettings();
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
             this.UpdateStyles();
         }
@@ -188,6 +190,26 @@ namespace DisplaySystem
             }
         }
 
+        private void checkSettings()
+        {
+            if (shownSettings)
+            {
+                modifyPowerSupplyModel_btn.Visible = true;
+                modifyTrackLine_btn.Visible = true;
+                modifyTrackPoint_btn.Visible = true;
+                save_btn.Visible = true;
+                showPoint_btn.Visible = true;
+            }
+            else
+            {
+                modifyPowerSupplyModel_btn.Visible = false;
+                modifyTrackLine_btn.Visible = false;
+                modifyTrackPoint_btn.Visible = false;
+                save_btn.Visible = false;
+                showPoint_btn.Visible = false;
+            }
+        }
+
         private void loadData()
         {
             IFormatter formatter = new BinaryFormatter();
@@ -242,6 +264,24 @@ namespace DisplaySystem
                 count++;
             }
 
+        }
+
+        public void refreshButtons()
+        {
+            foreach(Control ctl in this.Controls)
+            {
+                if (ctl is Button)//挑选出是按钮类型的
+                {
+                   foreach(Button btn in allButtons)
+                    {
+                        if(ctl.Text.Equals(btn.Text))
+                        {
+                            this.Controls.Remove(ctl);
+                        }
+                    }
+                }
+            }
+            createButtons();
         }
 
         void btn_Click(object sender, EventArgs e)
@@ -334,6 +374,7 @@ namespace DisplaySystem
             graphic.DrawLine(p, new Point(point.X - 4, point.Y), new Point(point.X +4, point.Y));
             Font font = new Font("微软雅黑", 10.0f, FontStyle.Bold);
             Font fontPoint = new Font("微软雅黑", 7.0f, FontStyle.Bold);
+            
             graphic.DrawString(lineText.ToString(), font, Brushes.White, point.X, point.Y - 20);
             if (pointShown)
             {
@@ -489,8 +530,22 @@ namespace DisplaySystem
             }
             foreach(Button btn in allButtons)
             {
-                btn.Location = btn.Location = new Point(400 + 170 * count, this.Height - 200);
+                btn.Location  = new Point(400 + 170 * count, this.Height - 200);
                 count++;
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (shownSettings)
+            {
+                shownSettings = false;
+                checkSettings();
+            }
+            else
+            {
+                shownSettings = true;
+                checkSettings();
             }
         }
     }

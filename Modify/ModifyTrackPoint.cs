@@ -46,10 +46,12 @@ namespace DisplaySystem.Modify
 
         private void id_tb_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar != 8 && !Char.IsDigit(e.KeyChar))
+            
+            if (e.KeyChar != 8 && !Char.IsDigit(e.KeyChar) && !char.IsLetter(e.KeyChar))
             {
                 e.Handled = true;
             }
+            
         }
 
         private void x_tb_TextChanged(object sender, EventArgs e)
@@ -104,12 +106,10 @@ namespace DisplaySystem.Modify
                 x_tb.Text.Length != 0 &&
                 y_tb.Text.Length != 0)
             {
-
                 try
                 {
                     if (TrackPointListView.SelectedItems.Count == 0)
                     {//新建
-
                         TrackPoint _tp = new TrackPoint();
                         _tp.trackPointID = int.Parse(id_tb.Text.ToString());
                         _tp.trackPoint = new Point(int.Parse(x_tb.Text), int.Parse(y_tb.Text));

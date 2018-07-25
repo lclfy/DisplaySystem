@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DisplaySystem.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,6 +14,7 @@ namespace DisplaySystem.Modify
         List<PowerSupplyModel> psModel;
         List<TrackLine> tLine;
         List<TrackPoint> tPoint;
+        List<Signal> signal;
 
         Main main;
         public ModifyPowerSupplyModel(Main _main)
@@ -21,6 +23,7 @@ namespace DisplaySystem.Modify
             psModel = _main.psModel;
             tLine = _main.tLine;
             tPoint = _main.tPoint;
+            signal = main.signal;
             InitializeComponent();
         }
 
@@ -57,6 +60,13 @@ namespace DisplaySystem.Modify
                     lvi.SubItems.Add(_point.trackPoint.ToString());
                     otherPoints_lv.Items.Add(lvi);
                 }
+                foreach (Signal _signal in signal)
+                {
+                    ListViewItem lvi = new ListViewItem(_signal.signalID.ToString());
+                    lvi.SubItems.Add(_signal.signalPoint.ToString());
+                    otherFunctionalPoints_lv.Items.Add(lvi);
+                }
+                otherFunctionalPoints_lv.Update();
                 otherPoints_lv.Update();
                 otherTracks_lv.Update();
             }
@@ -67,6 +77,7 @@ namespace DisplaySystem.Modify
         {//传空为清空表格
             containPoints_lv.Items.Clear();
             containTracks_lv.Items.Clear();
+            containsFunctionalPoints_lv.Items.Clear();
             if(_psModel != null)
             {
                 foreach (TrackPoint _tp in _psModel.containedTrackPoint)
@@ -131,6 +142,29 @@ namespace DisplaySystem.Modify
                         containTracks_lv.Items.Add(lvi_Line);
                     }
                 }
+                foreach (Signal _s in _psModel.functionalTrackPoint)
+                {
+                    ListViewItem lvi_Signal = new ListViewItem(_s.signalID.ToString());
+                    lvi_Signal.SubItems.Add(_s.signalPoint.ToString());
+                    bool hasGotIt = false;
+                    for (int ij = 0; ij < signal.Count; ij++)
+                    {
+                        if (signal[ij].signalID.Equals(_s.signalID))
+                        {
+                            lvi_Signal.SubItems.Add(ij.ToString());
+                            hasGotIt = true;
+                        }
+                        if (hasGotIt)
+                        {
+                            break;
+                        }
+                    }
+                    if (hasGotIt)
+                    {
+                        containsFunctionalPoints_lv.Items.Add(lvi_Signal);
+                    }
+                }
+                containsFunctionalPoints_lv.Update();
                 containPoints_lv.Update();
                 containTracks_lv.Update();
             }
@@ -162,6 +196,7 @@ namespace DisplaySystem.Modify
             name_tb.Text = "";
             containPoints_lv.Items.Clear();
             containTracks_lv.Items.Clear();
+            containsFunctionalPoints_lv.Items.Clear();
         }
 
         private void save_btn_Click(object sender, EventArgs e)
@@ -176,6 +211,7 @@ namespace DisplaySystem.Modify
                     _psModel.powerSupplyName = name_tb.Text;
                     List<TrackPoint> _tpList = new List<TrackPoint>();
                     List<TrackLine> _tlList = new List<TrackLine>();
+                    List<Signal> _signalList = new List<Signal>();
                     if (containPoints_lv.Items.Count != 0)
                     {
                         foreach(ListViewItem lvi in containPoints_lv.Items)
@@ -214,8 +250,18 @@ namespace DisplaySystem.Modify
                             _tlList.Add(_tline);
                         }
                     }
+                    if (containsFunctionalPoints_lv.Items.Count != 0)
+                    {
+                        foreach (ListViewItem lvi in containsFunctionalPoints_lv.Items)
+                        {
+                            Signal _s = new Signal();
+                            _s = (Signal)signal[int.Parse(lvi.SubItems[2].Text)].Clone();
+                            _signalList.Add(_s);
+                        }
+                    }
                     _psModel.containedTrackLine = _tlList;
                     _psModel.containedTrackPoint = _tpList;
+                    _psModel.functionalTrackPoint = _signalList;
                     if(ps_lv.SelectedItems.Count  != 0)
                     {
                         psModel.RemoveAt(ps_lv.SelectedItems[0].Index);
@@ -343,6 +389,27 @@ namespace DisplaySystem.Modify
         private void groupBox1_Enter(object sender, EventArgs e)
         {
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {//信号机的添加按钮
+            if (otherFunctionalPoints_lv.SelectedItems.Count != 0)
+            {
+                ListViewItem lvi = new ListViewItem(otherFunctionalPoints_lv.SelectedItems[0].SubItems[0].Text);
+                lvi.SubItems.Add(otherFunctionalPoints_lv.SelectedItems[0].SubItems[1].Text);
+                lvi.SubItems.Add(otherFunctionalPoints_lv.SelectedItems[0].Index.ToString());
+                containsFunctionalPoints_lv.Items.Add(lvi);
+                containsFunctionalPoints_lv.Update();
+            }
+        }
+
+        private void deleteSignal_btn_Click(object sender, EventArgs e)
+        {
+            if (containsFunctionalPoints_lv.SelectedItems.Count != 0)
+            {
+                containsFunctionalPoints_lv.Items.RemoveAt(containsFunctionalPoints_lv.SelectedItems[0].Index);
+                containsFunctionalPoints_lv.Update();
+            }
         }
     }
 }

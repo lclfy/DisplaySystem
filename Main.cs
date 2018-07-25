@@ -24,6 +24,7 @@ namespace DisplaySystem
         public List<PowerSupplyModel> psModel;
         public List<TrackLine> tLine;
         public List<TrackPoint> tPoint;
+        public List<Signal> signal;
         public List<Button> allButtons;
         Graphics graphic;
         bool pointShown = false;
@@ -73,6 +74,10 @@ namespace DisplaySystem
             if(psModel == null)
             {
                 psModel = new List<PowerSupplyModel>();
+            }
+            if(signal == null)
+            {
+                signal = new List<Signal>();
             }
             for (int j = 0; j < tLine.Count; j++)
             {//检查线里面有没有无用点
@@ -203,7 +208,38 @@ namespace DisplaySystem
                         iPSPoint--;
                     }
                 }
+
+                //检查供电臂内有没有无用信号机
+                if(psModel[iPS].functionalTrackPoint == null)
+                {
+                    psModel[iPS].functionalTrackPoint = new List<Signal>();
+                }
+                for (int iPSSignal = 0; iPSSignal < psModel[iPS].functionalTrackPoint.Count; iPSSignal++)
+                {
+                    bool hasGotIt = false;
+                    foreach (Signal _tp in signal)
+                    {
+                        if (psModel[iPS].functionalTrackPoint[iPSSignal].signalID.Equals(_tp.signalID))
+                        {
+                            hasGotIt = true;
+                        }
+                        if (hasGotIt)
+                        {
+                            break;
+                        }
+                    }
+                    if (!hasGotIt)
+                    {
+                        if (psModel[iPS].functionalTrackPoint != null)
+                        {
+                            psModel[iPS].functionalTrackPoint.RemoveAt(iPSSignal);
+                            iPSSignal--;
+                        }
+                    }
+                }
             }
+
+
         }
 
         private void checkSettings()
@@ -216,6 +252,7 @@ namespace DisplaySystem
                 save_btn.Visible = true;
                 showPoint_btn.Visible = true;
                 title_tb.Visible = true;
+                modifySignal_btn.Visible = true;
                 label1.Visible = true;
             }
             else
@@ -225,6 +262,7 @@ namespace DisplaySystem
                 modifyTrackPoint_btn.Visible = false;
                 save_btn.Visible = false;
                 showPoint_btn.Visible = false;
+                modifySignal_btn.Visible = false;
                 title_tb.Visible = false;
                 label1.Visible = false;
             }
@@ -268,6 +306,14 @@ namespace DisplaySystem
             {
                 tLine = new List<TrackLine>();
             }
+            try
+            {
+                signal = _data.signal;
+            }
+            catch (Exception e)
+            {
+                signal = new List<Signal>();
+            }
             if (_data.title != null)
             {
                 title_tb.Text = _data.title;
@@ -308,6 +354,16 @@ namespace DisplaySystem
                 catch (Exception e2)
                 {
                     psModel = new List<PowerSupplyModel>();
+                }
+                try
+                {
+                    Stream streamSignal = new FileStream(Application.StartupPath + "\\Data\\signal.bin", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    signal = (List<Signal>)formatter.Deserialize(streamSignal);
+                    streamSignal.Close();
+                }
+                catch (Exception e2)
+                {
+                    signal = new List<Signal>();
                 }
             }
             
@@ -392,6 +448,7 @@ namespace DisplaySystem
             _dt.tLine = this.tLine;
             _dt.tPoint = this.tPoint;
             _dt.psModel = this.psModel;
+            _dt.signal = this.signal;
             _dt.title = title_lbl.Text;
             
             try
@@ -400,7 +457,7 @@ namespace DisplaySystem
                 Stream stream = new FileStream(Application.StartupPath + "\\Data\\modelData.bin", FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
                 formatter.Serialize(stream, _dt);
                 stream.Close();
-                /*
+                
                 Stream streamLine = new FileStream(Application.StartupPath + "\\Data\\tLine.bin", FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
                 formatter.Serialize(streamLine, tLine);
                 streamLine.Close();
@@ -410,7 +467,10 @@ namespace DisplaySystem
                 Stream streamPS = new FileStream(Application.StartupPath + "\\Data\\psModel.bin", FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
                 formatter.Serialize(streamPS, psModel);
                 streamPS.Close();
-                */
+                Stream streamSignal = new FileStream(Application.StartupPath + "\\Data\\signal.bin", FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
+                formatter.Serialize(streamSignal, signal);
+                streamSignal.Close();
+                
                 return true;
             }catch(Exception e)
             {
@@ -485,6 +545,39 @@ namespace DisplaySystem
             if (pointShown && !isOnShow)
             {
                 graphic.DrawString("(" +point.X.ToString() + "," + point.Y.ToString() + ")", fontPoint, Brushes.Yellow, point.X/zoomX, (point.Y - 30)/zoomX);
+            }
+        }
+
+        private void paintSignalTower(Signal _s ,  bool isOnShow = false)
+        {
+            //isOnShow为该点是否应该高亮展示
+            if (_s == null)
+            {
+                return;
+            }
+            else if (_s.signalPoint == null)
+            {
+                return;
+            }
+            Point point = _s.signalPoint;
+            Font font = new Font("微软雅黑", 10.0f, FontStyle.Bold);
+            Font fontPoint = new Font("微软雅黑", 7.0f, FontStyle.Bold);
+            string lineText = _s.signalID.ToString();
+            Pen p;
+            if (isOnShow && showFunctionalPoints)
+            {
+                p = new Pen(Color.Red, 10);
+                graphic.DrawLine(p, (point.X - 5) / zoomX, point.Y / zoomX, (point.X + 5) / zoomX, point.Y / zoomX);
+            }
+            else
+            {
+                p = new Pen(Color.Green, 8);
+                graphic.DrawLine(p, (point.X - 4) / zoomX, (point.Y) / zoomX, (point.X + 4) / zoomX, point.Y / zoomX);
+            }
+            graphic.DrawString(lineText.ToString(), font, Brushes.White, point.X / zoomX, (point.Y - 20) / zoomX);
+            if (pointShown && !isOnShow)
+            {
+                graphic.DrawString("(" + point.X.ToString() + "," + point.Y.ToString() + ")", fontPoint, Brushes.Yellow, point.X / zoomX, (point.Y - 30) / zoomX);
             }
         }
 
@@ -564,6 +657,10 @@ namespace DisplaySystem
             {
                 paintPoint(_tp);
             }
+            foreach(Signal _s in signal)
+            {
+                paintSignalTower(_s);
+            }
             foreach(PowerSupplyModel _ps in psModel)
             {
                 if (_ps.powerSupplyName.Equals(shownPowerSupplyModelName))
@@ -572,6 +669,10 @@ namespace DisplaySystem
                     foreach(TrackPoint _tp in _ps.containedTrackPoint)
                     {
                         paintPoint(_tp, true);
+                    }
+                    foreach(Signal _s in _ps.functionalTrackPoint)
+                    {
+                        paintSignalTower(_s, true);
                     }
                 }
             }
@@ -606,6 +707,12 @@ namespace DisplaySystem
         private void button3_Click(object sender, EventArgs e)
         {
             ModifyPowerSupplyModel form = new ModifyPowerSupplyModel(this);
+            form.Show();
+        }
+
+        private void modifySignal_btn_Click(object sender, EventArgs e)
+        {
+            ModifySignal form = new ModifySignal(this);
             form.Show();
         }
 
@@ -648,11 +755,12 @@ namespace DisplaySystem
             setting_btn.Location = new Point(16,  this.Height - 80);
             modifyTrackLine_btn.Location = new Point(16, this.Height - 120);
             modifyTrackPoint_btn.Location = new Point(16, this.Height - 160);
-            modifyPowerSupplyModel_btn.Location = new Point(16, this.Height - 200);
-            showPoint_btn.Location = new Point(16, this.Height - 240);
-            save_btn.Location = new Point(16, this.Height - 280);
-            title_tb.Location = new Point(16, this.Height - 310);
-            label1.Location = new Point(16, this.Height - 325);
+            modifySignal_btn.Location = new Point(16, this.Height - 200);
+            modifyPowerSupplyModel_btn.Location = new Point(16, this.Height - 240);
+            showPoint_btn.Location = new Point(16, this.Height - 280);
+            save_btn.Location = new Point(16, this.Height - 320);
+            title_tb.Location = new Point(16, this.Height - 350);
+            label1.Location = new Point(16, this.Height - 365);
             title_lbl.Location = new Point((this.Width / 2)-(title_lbl.Text.Length*35), 30);
         }
 
@@ -677,5 +785,7 @@ namespace DisplaySystem
         {
             RelocateButtons();
         }
+
+
     }
 }

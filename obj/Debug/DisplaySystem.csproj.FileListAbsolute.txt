@@ -34,3 +34,4 @@ D:\ZRC\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.Properties.Resources.
 D:\ZRC\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.csproj.GenerateResource.Cache
 D:\ZRC\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.exe
 D:\ZRC\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.pdb
+D:\ZRC\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.Modify.ModifySignal.resources

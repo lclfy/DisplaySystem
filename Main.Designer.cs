@@ -45,7 +45,7 @@
             // 
             // modifyTrackLine_btn
             // 
-            this.modifyTrackLine_btn.Location = new System.Drawing.Point(12, 954);
+            this.modifyTrackLine_btn.Location = new System.Drawing.Point(16, 502);
             this.modifyTrackLine_btn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.modifyTrackLine_btn.Name = "modifyTrackLine_btn";
             this.modifyTrackLine_btn.Size = new System.Drawing.Size(94, 33);
@@ -56,7 +56,7 @@
             // 
             // modifyTrackPoint_btn
             // 
-            this.modifyTrackPoint_btn.Location = new System.Drawing.Point(12, 913);
+            this.modifyTrackPoint_btn.Location = new System.Drawing.Point(16, 461);
             this.modifyTrackPoint_btn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.modifyTrackPoint_btn.Name = "modifyTrackPoint_btn";
             this.modifyTrackPoint_btn.Size = new System.Drawing.Size(94, 33);
@@ -67,7 +67,7 @@
             // 
             // modifyPowerSupplyModel_btn
             // 
-            this.modifyPowerSupplyModel_btn.Location = new System.Drawing.Point(12, 872);
+            this.modifyPowerSupplyModel_btn.Location = new System.Drawing.Point(16, 420);
             this.modifyPowerSupplyModel_btn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.modifyPowerSupplyModel_btn.Name = "modifyPowerSupplyModel_btn";
             this.modifyPowerSupplyModel_btn.Size = new System.Drawing.Size(94, 33);
@@ -84,7 +84,7 @@
             // 
             // save_btn
             // 
-            this.save_btn.Location = new System.Drawing.Point(12, 790);
+            this.save_btn.Location = new System.Drawing.Point(16, 338);
             this.save_btn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.save_btn.Name = "save_btn";
             this.save_btn.Size = new System.Drawing.Size(94, 33);
@@ -101,7 +101,7 @@
             // 
             // showPoint_btn
             // 
-            this.showPoint_btn.Location = new System.Drawing.Point(12, 831);
+            this.showPoint_btn.Location = new System.Drawing.Point(16, 379);
             this.showPoint_btn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.showPoint_btn.Name = "showPoint_btn";
             this.showPoint_btn.Size = new System.Drawing.Size(94, 33);
@@ -113,14 +113,14 @@
             // buttons_pnl
             // 
             this.buttons_pnl.Location = new System.Drawing.Point(122, 1088);
-            this.buttons_pnl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttons_pnl.Margin = new System.Windows.Forms.Padding(2);
             this.buttons_pnl.Name = "buttons_pnl";
             this.buttons_pnl.Size = new System.Drawing.Size(1986, 243);
             this.buttons_pnl.TabIndex = 5;
             // 
             // setting_btn
             // 
-            this.setting_btn.Location = new System.Drawing.Point(12, 995);
+            this.setting_btn.Location = new System.Drawing.Point(16, 543);
             this.setting_btn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.setting_btn.Name = "setting_btn";
             this.setting_btn.Size = new System.Drawing.Size(94, 33);
@@ -131,6 +131,7 @@
             // 
             // title_lbl
             // 
+            this.title_lbl.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.title_lbl.AutoSize = true;
             this.title_lbl.Font = new System.Drawing.Font("微软雅黑", 42F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.title_lbl.ForeColor = System.Drawing.SystemColors.ButtonFace;
@@ -144,7 +145,7 @@
             // title_tb
             // 
             this.title_tb.Font = new System.Drawing.Font("微软雅黑", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.title_tb.Location = new System.Drawing.Point(12, 756);
+            this.title_tb.Location = new System.Drawing.Point(16, 304);
             this.title_tb.Name = "title_tb";
             this.title_tb.Size = new System.Drawing.Size(94, 24);
             this.title_tb.TabIndex = 8;
@@ -155,7 +156,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label1.Location = new System.Drawing.Point(8, 733);
+            this.label1.Location = new System.Drawing.Point(12, 281);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(37, 20);
             this.label1.TabIndex = 9;
@@ -165,8 +166,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.ClientSize = new System.Drawing.Size(1904, 1041);
+            this.ClientSize = new System.Drawing.Size(1904, 1001);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.title_tb);
             this.Controls.Add(this.title_lbl);
@@ -181,6 +183,7 @@
             this.Name = "Main";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.Main_Scroll);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Main_Paint);
             this.Resize += new System.EventHandler(this.Main_Resize);
             this.ResumeLayout(false);

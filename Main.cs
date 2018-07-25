@@ -29,6 +29,7 @@ namespace DisplaySystem
         bool pointShown = false;
         bool showSettings = true;
         bool showFunctionalPoints = true;
+        float zoomX = 0;
         public string shownPowerSupplyModelName = "";
 
         public Main()
@@ -38,13 +39,25 @@ namespace DisplaySystem
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            Controls.Remove(buttons_pnl);
             loadData();
             checkEmptyObject();
             createButtons();
             checkSettings();
+            checkResolution();
+            RelocateButtons();
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
             this.UpdateStyles();
-            this.AutoScrollMinSize = new Size(800, 600);
+            this.AutoScrollMinSize = new Size(1920, 1080);
+        }
+
+        private void checkResolution()
+        {
+            int SH = SystemInformation.WorkingArea.Height - 100;
+            int SW = SystemInformation.WorkingArea.Width;
+            zoomX = (float)(1920.0/SW);
+            this.Size = new Size(SW, SH);
+
         }
 
         private void checkEmptyObject()
@@ -202,6 +215,8 @@ namespace DisplaySystem
                 modifyTrackPoint_btn.Visible = true;
                 save_btn.Visible = true;
                 showPoint_btn.Visible = true;
+                title_tb.Visible = true;
+                label1.Visible = true;
             }
             else
             {
@@ -210,6 +225,8 @@ namespace DisplaySystem
                 modifyTrackPoint_btn.Visible = false;
                 save_btn.Visible = false;
                 showPoint_btn.Visible = false;
+                title_tb.Visible = false;
+                label1.Visible = false;
             }
         }
 
@@ -398,12 +415,12 @@ namespace DisplaySystem
             Point point2 = _tl.selfRightPoint;
             String pointText = _tl.trackLineID.ToString();
             Pen p = new Pen(Color.White, 3);
-            graphic.DrawLine(p, point1, point2);
+            graphic.DrawLine(p, point1.X/zoomX,point1.Y/zoomX,point2.X/zoomX, point2.Y/zoomX);
             Font font = new Font("微软雅黑", 10.0f, FontStyle.Bold);
             //graphic.DrawString(pointText, base.Font, Brushes.White, 0, 0, new StringFormat(StringFormatFlags.DirectionVertical));
             if(_tl.trackLineID <= 32 || pointShown)
             {
-                graphic.DrawString(pointText, font, Brushes.White, (point1.X + point2.X) / 2, ((point1.Y + point2.Y) / 2) - 20);
+                graphic.DrawString(pointText, font, Brushes.White, ((point1.X + point2.X) / 2)/zoomX, (((point1.Y + point2.Y) / 2) - 20)/zoomX);
             }
             Font font1 = new Font("微软雅黑", 8.0f, FontStyle.Bold);
             //graphic.DrawString(_tl.selfLeftPoint.ToString(), font1, Brushes.Yellow, point1.X, point1.Y - 20, new StringFormat(StringFormatFlags.DirectionVertical));
@@ -430,25 +447,25 @@ namespace DisplaySystem
             if (isOnShow && showFunctionalPoints)
             {
                 p = new Pen(Color.Red, 10);
-                graphic.DrawLine(p, new Point(point.X - 5, point.Y), new Point(point.X + 5, point.Y));
+                graphic.DrawLine(p, (point.X - 5)/zoomX, point.Y/zoomX, (point.X + 5)/zoomX, point.Y/zoomX);
                 if (_tp.switchDirection == 1)
                 {
-                    graphic.DrawString("单锁定位", font, Brushes.Yellow, point.X - 10, point.Y - 30);
+                    graphic.DrawString("单锁定位", font, Brushes.Yellow, (point.X - 10)/zoomX, (point.Y - 30)/zoomX);
                 }
                 else if (_tp.switchDirection == 2)
                 {
-                    graphic.DrawString("单锁反位", font, Brushes.Yellow, point.X, point.Y - 30);
+                    graphic.DrawString("单锁反位", font, Brushes.Yellow, (point.X)/zoomX, (point.Y - 30)/zoomX);
                 }
             }
             else
             {
                 p = new Pen(Color.Green, 8);
-                graphic.DrawLine(p, new Point(point.X - 4, point.Y), new Point(point.X + 4, point.Y));
+                graphic.DrawLine(p, (point.X - 4)/zoomX, (point.Y)/zoomX,(point.X + 4)/zoomX, point.Y/zoomX);
             }
-            graphic.DrawString(lineText.ToString(), font, Brushes.White, point.X, point.Y - 20);
+            graphic.DrawString(lineText.ToString(), font, Brushes.White, point.X/zoomX, (point.Y - 20)/zoomX);
             if (pointShown && !isOnShow)
             {
-                graphic.DrawString("(" +point.X.ToString() + "," + point.Y.ToString() + ")", fontPoint, Brushes.Yellow, point.X, point.Y - 30);
+                graphic.DrawString("(" +point.X.ToString() + "," + point.Y.ToString() + ")", fontPoint, Brushes.Yellow, point.X/zoomX, (point.Y - 30)/zoomX);
             }
         }
 
@@ -465,23 +482,23 @@ namespace DisplaySystem
             Pen p = new Pen(Color.Red, 8);
             foreach(TrackLine _tl in _ps.containedTrackLine)
             {
-                Point[] sbxAll = new Point[]{
-                new Point(_tl.selfLeftPoint.X, _tl.selfLeftPoint.Y + 15),
-                new Point(_tl.selfRightPoint.X, _tl.selfRightPoint.Y + 15),
-               new Point(_tl.selfRightPoint.X, _tl.selfRightPoint.Y - 15),
-                new Point(_tl.selfLeftPoint.X, _tl.selfLeftPoint.Y - 15)
+                PointF[] sbxAll = new PointF[]{
+                new PointF(_tl.selfLeftPoint.X/zoomX, (_tl.selfLeftPoint.Y + 15)/zoomX),
+                new PointF(_tl.selfRightPoint.X/zoomX, (_tl.selfRightPoint.Y + 15)/zoomX),
+               new PointF(_tl.selfRightPoint.X/zoomX, (_tl.selfRightPoint.Y - 15)/zoomX),
+                new PointF(_tl.selfLeftPoint.X/zoomX, (_tl.selfLeftPoint.Y - 15)/zoomX)
                 };
-                Point[] sbxLeftIn = new Point[]{
-                new Point(_tl.selfLeftPoint.X, _tl.selfLeftPoint.Y + 15),
-                new Point((_tl.selfRightPoint.X + _tl.selfLeftPoint.X)/2, (_tl.selfLeftPoint.Y+_tl.selfRightPoint.Y)/2 + 15),
-                new Point((_tl.selfRightPoint.X + _tl.selfLeftPoint.X)/2, (_tl.selfLeftPoint.Y+_tl.selfRightPoint.Y)/2 - 15),
-                new Point(_tl.selfLeftPoint.X, _tl.selfLeftPoint.Y - 15)
+                PointF[] sbxLeftIn = new PointF[]{
+                new PointF(_tl.selfLeftPoint.X/zoomX, (_tl.selfLeftPoint.Y + 15)/zoomX),
+                new PointF(((_tl.selfRightPoint.X + _tl.selfLeftPoint.X)/2)/zoomX, ((_tl.selfLeftPoint.Y+_tl.selfRightPoint.Y)/2 + 15)/zoomX),
+                new PointF(((_tl.selfRightPoint.X + _tl.selfLeftPoint.X)/2)/zoomX, ((_tl.selfLeftPoint.Y+_tl.selfRightPoint.Y)/2 - 15)/zoomX),
+                new PointF(_tl.selfLeftPoint.X/zoomX, (_tl.selfLeftPoint.Y - 15)/zoomX)
                 };
-                Point[] sbxRightIn = new Point[]{
-                new Point((_tl.selfRightPoint.X + _tl.selfLeftPoint.X)/2, (_tl.selfLeftPoint.Y+_tl.selfRightPoint.Y)/2 + 15),
-                new Point(_tl.selfRightPoint.X, _tl.selfRightPoint.Y + 15),
-                new Point(_tl.selfRightPoint.X, _tl.selfRightPoint.Y - 15),
-                new Point((_tl.selfRightPoint.X + _tl.selfLeftPoint.X)/2, (_tl.selfLeftPoint.Y+_tl.selfRightPoint.Y)/2 - 15)
+                PointF[] sbxRightIn = new PointF[]{
+                new PointF(((_tl.selfRightPoint.X + _tl.selfLeftPoint.X)/2)/zoomX, ((_tl.selfLeftPoint.Y+_tl.selfRightPoint.Y)/2 + 15)/zoomX),
+                new PointF(_tl.selfRightPoint.X/zoomX, (_tl.selfRightPoint.Y + 15)/zoomX),
+                new PointF(_tl.selfRightPoint.X/zoomX, (_tl.selfRightPoint.Y - 15)/zoomX),
+                new PointF(((_tl.selfRightPoint.X + _tl.selfLeftPoint.X)/2)/zoomX, ((_tl.selfLeftPoint.Y+_tl.selfRightPoint.Y)/2 - 15)/zoomX)
                 };
                 if (_tl.containsInPS == 0)
                 {//绘制全部区域(上15，下15)
@@ -544,12 +561,9 @@ namespace DisplaySystem
 
         private void Main_Paint(object sender, PaintEventArgs e)
         {
-            
             graphic = e.Graphics;
             graphic.TranslateTransform(this.AutoScrollPosition.X, this.AutoScrollPosition.Y);
             selfPaint(e.Graphics);
-
-
         }
 
 
@@ -600,18 +614,32 @@ namespace DisplaySystem
             }
         }
 
-        private void Main_Resize(object sender, EventArgs e)
+        private void RelocateButtons()
         {
             int count = 0;
-            if(allButtons == null)
+            if (allButtons == null)
             {
                 return;
             }
-            foreach(Button btn in allButtons)
+            foreach (Button btn in allButtons)
             {
-                btn.Location  = new Point(400 + 170 * count, this.Height - 200);
+                btn.Location = new Point(400 + 170 * count, this.Height - 200);
                 count++;
             }
+            setting_btn.Location = new Point(16,  this.Height - 80);
+            modifyTrackLine_btn.Location = new Point(16, this.Height - 120);
+            modifyTrackPoint_btn.Location = new Point(16, this.Height - 160);
+            modifyPowerSupplyModel_btn.Location = new Point(16, this.Height - 200);
+            showPoint_btn.Location = new Point(16, this.Height - 240);
+            save_btn.Location = new Point(16, this.Height - 280);
+            title_tb.Location = new Point(16, this.Height - 310);
+            label1.Location = new Point(16, this.Height - 325);
+            title_lbl.Location = new Point((this.Width / 2)-(title_lbl.Text.Length*35), 30);
+        }
+
+        private void Main_Resize(object sender, EventArgs e)
+        {
+            RelocateButtons();
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -623,6 +651,12 @@ namespace DisplaySystem
         private void title_tb_TextChanged(object sender, EventArgs e)
         {
             title_lbl.Text = title_tb.Text;
+            RelocateButtons();
+        }
+
+        private void Main_Scroll(object sender, ScrollEventArgs e)
+        {
+            RelocateButtons();
         }
     }
 }

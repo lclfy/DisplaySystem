@@ -25,7 +25,6 @@ namespace DisplaySystem
         public List<TrackLine> tLine;
         public List<TrackPoint> tPoint;
         public List<Button> allButtons;
-        ModelData data;
         Graphics graphic;
         bool pointShown = false;
         bool showSettings = true;
@@ -34,17 +33,18 @@ namespace DisplaySystem
 
         public Main()
         {
-            loadData();
             InitializeComponent();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            loadData();
             checkEmptyObject();
             createButtons();
             checkSettings();
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
             this.UpdateStyles();
+            this.AutoScrollMinSize = new Size(800, 600);
         }
 
         private void checkEmptyObject()
@@ -224,49 +224,56 @@ namespace DisplaySystem
                 tLine = _data.tLine;
                 tPoint = _data.tPoint;
                 psModel = _data.psModel;
+                if(_data.title != null)
+                {
+                    title_tb.Text = _data.title;
+                    title_lbl.Text = _data.title;
+                }
                 tLine.Sort();
                 tPoint.Sort();
             }
             catch (Exception e)
             {
                 //MessageBox.Show("数据损坏或未放入指定数据文件","提示",MessageBoxButtons.OK,MessageBoxIcon.Warning);
-                data = new ModelData();
                 tPoint = new List<TrackPoint>();
                 psModel = new List<PowerSupplyModel>();
                 tLine = new List<TrackLine>();
             }
-            /*
-            try
+            if (true)
             {
-                Stream streamLine = new FileStream(Application.StartupPath + "\\Data\\tLine.bin", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                tLine = (List<TrackLine>)formatter.Deserialize(streamLine);
-                streamLine.Close();
-                tLine.Sort();
+                try
+                {
+                    Stream streamLine = new FileStream(Application.StartupPath + "\\Data\\tLine.bin", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    tLine = (List<TrackLine>)formatter.Deserialize(streamLine);
+                    streamLine.Close();
+                    tLine.Sort();
+                }
+                catch (Exception e1)
+                {
+                    tPoint = new List<TrackPoint>();
+                }
+                try
+                {
+                    Stream streamPoint = new FileStream(Application.StartupPath + "\\Data\\tPoint.bin", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    tPoint = (List<TrackPoint>)formatter.Deserialize(streamPoint);
+                    streamPoint.Close();
+                    tPoint.Sort();
+                }
+                catch (Exception e1)
+                {
+                    tPoint = new List<TrackPoint>();
+                }
+                try
+                {
+                    Stream streamPS = new FileStream(Application.StartupPath + "\\Data\\psModel.bin", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    psModel = (List<PowerSupplyModel>)formatter.Deserialize(streamPS);
+                    streamPS.Close();
+                }
+                catch (Exception e2)
+                {
+                    psModel = new List<PowerSupplyModel>();
+                }
             }
-            catch (Exception e1)
-            {
-                tPoint = new List<TrackPoint>();
-            }
-            try
-            {
-                Stream streamPoint = new FileStream(Application.StartupPath + "\\Data\\tPoint.bin", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                tPoint = (List<TrackPoint>)formatter.Deserialize(streamPoint);
-                streamPoint.Close();
-                tPoint.Sort();
-            }catch(Exception e1)
-            {
-                tPoint = new List<TrackPoint>();
-            }
-            try
-            {
-                Stream streamPS = new FileStream(Application.StartupPath + "\\Data\\psModel.bin", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                psModel = (List<PowerSupplyModel>)formatter.Deserialize(streamPS);
-                streamPS.Close();
-            }catch(Exception e2)
-            {
-                psModel = new List<PowerSupplyModel>();
-            }
-            */
             
         }
         
@@ -349,6 +356,8 @@ namespace DisplaySystem
             _dt.tLine = this.tLine;
             _dt.tPoint = this.tPoint;
             _dt.psModel = this.psModel;
+            _dt.title = title_lbl.Text;
+            
             try
             {
                 IFormatter formatter = new BinaryFormatter();
@@ -535,10 +544,14 @@ namespace DisplaySystem
 
         private void Main_Paint(object sender, PaintEventArgs e)
         {
+            
             graphic = e.Graphics;
+            graphic.TranslateTransform(this.AutoScrollPosition.X, this.AutoScrollPosition.Y);
             selfPaint(e.Graphics);
+
+
         }
-        
+
 
         public void updateTrackPoint(List<TrackPoint> _tPoint)
         {
@@ -605,6 +618,11 @@ namespace DisplaySystem
         {
             showSettings = !showSettings;
             checkSettings();
+        }
+
+        private void title_tb_TextChanged(object sender, EventArgs e)
+        {
+            title_lbl.Text = title_tb.Text;
         }
     }
 }

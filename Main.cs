@@ -24,6 +24,7 @@ namespace DisplaySystem
         public List<PowerSupplyModel> psModel;
         public List<TrackLine> tLine;
         public List<TrackPoint> tPoint;
+        public List<TrackPointAndSignal> tPoint1;
         public List<Button> allButtons;
         Graphics graphic;
         bool pointShown = false;
@@ -49,6 +50,19 @@ namespace DisplaySystem
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
             this.UpdateStyles();
             this.AutoScrollMinSize = new Size(1920, 1080);
+            tPoint1 = new List<TrackPointAndSignal>();
+            foreach(TrackPoint _tp in tPoint)
+            {
+                TrackPointAndSignal _tS = new TrackPointAndSignal();
+                _tS.trackPointID = _tp.trackPointID.ToString();
+                _tS.trackPoint = _tp.trackPoint;
+                _tS.switchDirection = _tp.switchDirection;
+                _tS.function = _tp.function;
+                _tS.firstTrackLine = _tp.firstTrackLine;
+                _tS.secondTrackLine = _tp.secondTrackLine;
+                _tS.thirdTrackLine = _tp.thirdTrackLine;
+                tPoint1.Add(_tS);
+            }
         }
 
         private void checkResolution()
@@ -239,7 +253,7 @@ namespace DisplaySystem
                 ModelData _data = (ModelData)formatter.Deserialize(stream);
                 stream.Close();
                 tLine = _data.tLine;
-                tPoint = _data.tPoint;
+                tPoint1 = _data.tPoint;
                 psModel = _data.psModel;
                 if(_data.title != null)
                 {
@@ -256,7 +270,7 @@ namespace DisplaySystem
                 psModel = new List<PowerSupplyModel>();
                 tLine = new List<TrackLine>();
             }
-            if (true)
+            if (false)
             {
                 try
                 {
@@ -371,7 +385,7 @@ namespace DisplaySystem
         {
             ModelData _dt = new ModelData();
             _dt.tLine = this.tLine;
-            _dt.tPoint = this.tPoint;
+            _dt.tPoint = this.tPoint1;
             _dt.psModel = this.psModel;
             _dt.title = title_lbl.Text;
             
@@ -381,6 +395,9 @@ namespace DisplaySystem
                 Stream stream = new FileStream(Application.StartupPath + "\\Data\\modelData.bin", FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
                 formatter.Serialize(stream, _dt);
                 stream.Close();
+                Stream streamPoint = new FileStream(Application.StartupPath + "\\Data\\tPointAndSignal.bin", FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
+                formatter.Serialize(streamPoint, tPoint1);
+                streamPoint.Close();
                 /*
                 Stream streamLine = new FileStream(Application.StartupPath + "\\Data\\tLine.bin", FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
                 formatter.Serialize(streamLine, tLine);
@@ -442,7 +459,7 @@ namespace DisplaySystem
             Point point = _tp.trackPoint;
             Font font = new Font("微软雅黑", 10.0f, FontStyle.Bold);
             Font fontPoint = new Font("微软雅黑", 7.0f, FontStyle.Bold);
-            int lineText = _tp.trackPointID;
+            string lineText = _tp.trackPointID.ToString();
             Pen p;
             if (isOnShow && showFunctionalPoints)
             {
@@ -623,15 +640,7 @@ namespace DisplaySystem
             }
             foreach (Button btn in allButtons)
             {
-<<<<<<< HEAD
-<<<<<<< HEAD
                 btn.Location = new Point((this.Width - 170*allButtons.Count)/2 + 170 * count, this.Height-(int)(this.Height*0.2));
-=======
-                btn.Location = new Point(400 + 170 * count, this.Height - 200);
->>>>>>> parent of dd922a0... 0725B8
-=======
-                btn.Location = new Point(400 + 170 * count, this.Height - 200);
->>>>>>> parent of dd922a0... 0725B8
                 count++;
             }
             setting_btn.Location = new Point(16,  this.Height - 80);

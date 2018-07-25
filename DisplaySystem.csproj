@@ -55,6 +55,7 @@
     </Compile>
     <Compile Include="Model\ModelData.cs" />
     <Compile Include="Model\PowerSupplyModel.cs" />
+    <Compile Include="Model\TrackPointAndSingal.cs" />
     <Compile Include="Modify\ModifyPowerSupplyModel.cs">
       <SubType>Form</SubType>
     </Compile>

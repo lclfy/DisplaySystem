@@ -35,3 +35,8 @@ D:\ZRC\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.csproj.GenerateResour
 D:\ZRC\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.exe
 D:\ZRC\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.pdb
 D:\ZRC\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.Modify.ModifySignal.resources
+D:\ZRC\DisplaySystem\DisplaySystem\bin\Debug\DisplaySystem.exe.manifest
+D:\ZRC\DisplaySystem\DisplaySystem\bin\Debug\DisplaySystem.application
+D:\ZRC\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.TrustInfo.xml
+D:\ZRC\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.exe.manifest
+D:\ZRC\DisplaySystem\DisplaySystem\obj\Debug\DisplaySystem.application

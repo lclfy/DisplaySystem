@@ -180,7 +180,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 33F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(3536, 1944);
             this.Controls.Add(this.modifySignal_btn);
             this.Controls.Add(this.label1);
@@ -193,6 +193,7 @@
             this.Controls.Add(this.modifyPowerSupplyModel_btn);
             this.Controls.Add(this.modifyTrackPoint_btn);
             this.Controls.Add(this.modifyTrackLine_btn);
+            this.ForeColor = System.Drawing.Color.Black;
             this.Margin = new System.Windows.Forms.Padding(5, 8, 5, 8);
             this.Name = "Main";
             this.Text = "Form1";

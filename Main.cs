@@ -28,7 +28,7 @@ namespace DisplaySystem
         public List<Button> allButtons;
         Graphics graphic;
         bool pointShown = false;
-        bool showSettings = true;
+        bool showSettings = false;
         bool showFunctionalPoints = true;
         float zoomX = 0;
         public string shownPowerSupplyModelName = "";
@@ -61,7 +61,7 @@ namespace DisplaySystem
 
         }
 
-        private void checkEmptyObject()
+        public void checkEmptyObject()
         {
             if(tLine == null)
             {
@@ -319,8 +319,15 @@ namespace DisplaySystem
                 title_tb.Text = _data.title;
                 title_lbl.Text = _data.title;
             }
-            tLine.Sort();
-            tPoint.Sort();
+            if(tLine != null)
+            {
+                tLine.Sort();
+            }
+            if(tPoint != null)
+            {
+                tPoint.Sort();
+            }
+
             if (false)
             {
                 try
@@ -457,7 +464,7 @@ namespace DisplaySystem
                 Stream stream = new FileStream(Application.StartupPath + "\\Data\\modelData.bin", FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
                 formatter.Serialize(stream, _dt);
                 stream.Close();
-                
+                /*
                 Stream streamLine = new FileStream(Application.StartupPath + "\\Data\\tLine.bin", FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
                 formatter.Serialize(streamLine, tLine);
                 streamLine.Close();
@@ -470,6 +477,7 @@ namespace DisplaySystem
                 Stream streamSignal = new FileStream(Application.StartupPath + "\\Data\\signal.bin", FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
                 formatter.Serialize(streamSignal, signal);
                 streamSignal.Close();
+                */
                 
                 return true;
             }catch(Exception e)
@@ -497,7 +505,7 @@ namespace DisplaySystem
             graphic.DrawLine(p, point1.X/zoomX,point1.Y/zoomX,point2.X/zoomX, point2.Y/zoomX);
             Font font = new Font("微软雅黑", 10.0f, FontStyle.Bold);
             //graphic.DrawString(pointText, base.Font, Brushes.White, 0, 0, new StringFormat(StringFormatFlags.DirectionVertical));
-            if(_tl.trackLineID <= 32 || pointShown)
+            if(_tl.trackLineID <= 16 || pointShown)
             {
                 graphic.DrawString(pointText, font, Brushes.White, ((point1.X + point2.X) / 2)/zoomX, (((point1.Y + point2.Y) / 2) - 20)/zoomX);
             }
@@ -520,6 +528,7 @@ namespace DisplaySystem
             }
             Point point = _tp.trackPoint;
             Font font = new Font("微软雅黑", 10.0f, FontStyle.Bold);
+            Font font1 = new Font("微软雅黑", 8.0f, FontStyle.Bold);
             Font fontPoint = new Font("微软雅黑", 7.0f, FontStyle.Bold);
             string lineText = _tp.trackPointID.ToString();
             Pen p;
@@ -529,11 +538,11 @@ namespace DisplaySystem
                 graphic.DrawLine(p, (point.X - 5)/zoomX, point.Y/zoomX, (point.X + 5)/zoomX, point.Y/zoomX);
                 if (_tp.switchDirection == 1)
                 {
-                    graphic.DrawString("单锁定位", font, Brushes.Yellow, (point.X - 10)/zoomX, (point.Y - 30)/zoomX);
+                    graphic.DrawString("锁定位", font1, Brushes.Yellow, (point.X - 10)/zoomX, (point.Y - 30)/zoomX);
                 }
                 else if (_tp.switchDirection == 2)
                 {
-                    graphic.DrawString("单锁反位", font, Brushes.Yellow, (point.X)/zoomX, (point.Y - 30)/zoomX);
+                    graphic.DrawString("锁反位", font1, Brushes.Yellow, (point.X)/zoomX, (point.Y - 30)/zoomX);
                 }
             }
             else
@@ -566,15 +575,15 @@ namespace DisplaySystem
             Pen p;
             if (isOnShow && showFunctionalPoints)
             {
-                p = new Pen(Color.Red, 10);
-                graphic.DrawLine(p, (point.X - 5) / zoomX, point.Y / zoomX, (point.X + 5) / zoomX, point.Y / zoomX);
+                p = new Pen(Color.Red, 20);
+                graphic.DrawLine(p, (point.X - 10) / zoomX, point.Y / zoomX, (point.X + 10) / zoomX, point.Y / zoomX);
             }
             else
             {
-                p = new Pen(Color.Green, 8);
-                graphic.DrawLine(p, (point.X - 4) / zoomX, (point.Y) / zoomX, (point.X + 4) / zoomX, point.Y / zoomX);
+                p = new Pen(Color.Green, 20);
+                graphic.DrawLine(p, (point.X - 10) / zoomX, (point.Y) / zoomX, (point.X + 10) / zoomX, point.Y / zoomX);
             }
-            graphic.DrawString(lineText.ToString(), font, Brushes.White, point.X / zoomX, (point.Y - 20) / zoomX);
+            graphic.DrawString(lineText.ToString(), font, Brushes.White, (point.X - 10) / zoomX, (point.Y - 30) / zoomX);
             if (pointShown && !isOnShow)
             {
                 graphic.DrawString("(" + point.X.ToString() + "," + point.Y.ToString() + ")", fontPoint, Brushes.Yellow, point.X / zoomX, (point.Y - 30) / zoomX);

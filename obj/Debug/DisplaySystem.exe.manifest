@@ -46,14 +46,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DisplaySystem.exe" size="66048">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DisplaySystem.exe" size="70656">
       <assemblyIdentity name="DisplaySystem" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>GDmYwpCGbCeKH7yDS1sVWKJjnuU=</dsig:DigestValue>
+        <dsig:DigestValue>G5MkYNY1P63vbwx4w7bw1NphnHY=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

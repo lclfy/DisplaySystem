@@ -28,10 +28,13 @@ namespace DisplaySystem
         public List<Button> allButtons;
         Graphics graphic;
         bool pointShown = false;
+        bool allPointsShown = false;
         bool showSettings = false;
         bool showFunctionalPoints = true;
         float zoomX = 0;
         public string shownPowerSupplyModelName = "";
+        int startTrackNum = 0;
+        int stopTrackNum = 0;
 
         public Main()
         {
@@ -253,7 +256,14 @@ namespace DisplaySystem
                 showPoint_btn.Visible = true;
                 title_tb.Visible = true;
                 modifySignal_btn.Visible = true;
+                //标题
                 label1.Visible = true;
+                //站台范围
+                label2.Visible = true;
+                //-号
+                label3.Visible = true;
+                startTrackNum_tb.Visible = true;
+                stopTrackNum_tb.Visible = true;
             }
             else
             {
@@ -265,6 +275,14 @@ namespace DisplaySystem
                 modifySignal_btn.Visible = false;
                 title_tb.Visible = false;
                 label1.Visible = false;
+                //标题
+                label1.Visible = false;
+                //站台范围
+                label2.Visible = false;
+                //-号
+                label3.Visible = false;
+                startTrackNum_tb.Visible = false;
+                stopTrackNum_tb.Visible = false;
             }
         }
 
@@ -319,7 +337,17 @@ namespace DisplaySystem
                 title_tb.Text = _data.title;
                 title_lbl.Text = _data.title;
             }
-            if(tLine != null)
+            if(_data.startTrackNum != 0)
+            {
+                startTrackNum = _data.startTrackNum;
+                startTrackNum_tb.Text = startTrackNum.ToString();
+            }
+            if (_data.stopTrackNum != 0)
+            {
+                stopTrackNum = _data.stopTrackNum;
+                stopTrackNum_tb.Text = stopTrackNum.ToString();
+            }
+            if (tLine != null)
             {
                 tLine.Sort();
             }
@@ -452,6 +480,8 @@ namespace DisplaySystem
         private bool saveData(string saveText = "")
         {
             ModelData _dt = new ModelData();
+            _dt.startTrackNum = startTrackNum;
+            _dt.stopTrackNum = stopTrackNum;
             _dt.tLine = this.tLine;
             _dt.tPoint = this.tPoint;
             _dt.psModel = this.psModel;
@@ -505,15 +535,46 @@ namespace DisplaySystem
             graphic.DrawLine(p, point1.X/zoomX,point1.Y/zoomX,point2.X/zoomX, point2.Y/zoomX);
             Font font = new Font("微软雅黑", 10.0f, FontStyle.Bold);
             //graphic.DrawString(pointText, base.Font, Brushes.White, 0, 0, new StringFormat(StringFormatFlags.DirectionVertical));
-            if(_tl.trackLineID <= 16 || pointShown)
-            {
-                graphic.DrawString(pointText, font, Brushes.White, ((point1.X + point2.X) / 2)/zoomX, (((point1.Y + point2.Y) / 2) - 20)/zoomX);
-            }
             Font font1 = new Font("微软雅黑", 8.0f, FontStyle.Bold);
+            Font font2 = new Font("微软雅黑", 12.0f, FontStyle.Bold);
             //graphic.DrawString(_tl.selfLeftPoint.ToString(), font1, Brushes.Yellow, point1.X, point1.Y - 20, new StringFormat(StringFormatFlags.DirectionVertical));
             //graphic.DrawString(_tl.selfRightPoint.ToString(), font1, Brushes.Yellow, point2.X, point2.Y - 20, new StringFormat(StringFormatFlags.DirectionVertical));
-             //graphic.DrawString("("+_tl.selfLeftPoint.X.ToString()+",\n"+ _tl.selfLeftPoint.Y.ToString()+")", font1, Brushes.Yellow, point1.X , point1.Y - 30);
-            //graphic.DrawString("(" + _tl.selfRightPoint.X.ToString() + ",\n" + _tl.selfRightPoint.Y.ToString() + ")", font1, Brushes.Yellow, point2.X, point2.Y - 30);
+            bool hasGotIt = false;
+            //方向文字
+
+            if (_tl.leftWayTo != null &&_tl.leftWayTo.Length != 0)
+            {
+                graphic.DrawString("⇋ " + _tl.leftWayTo + " ↴", font2, Brushes.Green, (point1.X-40) / zoomX, (((point1.Y + point2.Y) / 2) - 35) / zoomX);
+            }
+            if (_tl.rightWayTo != null &&_tl.rightWayTo.Length != 0)
+            {
+                graphic.DrawString("↴ " +_tl.rightWayTo + "⇌", font2, Brushes.Green, (point2.X-40) / zoomX, (((point1.Y + point2.Y) / 2) - 35) / zoomX);
+            }
+            if (startTrackNum <= _tl.trackLineID && _tl.trackLineID <= stopTrackNum )
+            {
+                //真正的站台字符画中间
+                graphic.DrawString(pointText, font, Brushes.White, ((1920 /2)-20)/ zoomX, (((point1.Y + point2.Y) / 2) - 20) / zoomX);
+                hasGotIt = true;
+            }
+            if(startTrackNum == 0 && stopTrackNum == 0)
+            {
+                graphic.DrawString(pointText, font, Brushes.White, ((point1.X + point2.X) / 2) / zoomX, (((point1.Y + point2.Y) / 2) - 20) / zoomX);
+            }
+            if (pointShown)
+            {//绘制坐标&有效绘画区域
+                if (!hasGotIt)
+                {
+                    graphic.DrawString(pointText, font, Brushes.White, ((point1.X + point2.X) / 2) / zoomX, (((point1.Y + point2.Y) / 2) - 20) / zoomX);
+                }
+                graphic.DrawString("(" + _tl.selfLeftPoint.X.ToString() + ",\n" + _tl.selfLeftPoint.Y.ToString() + ")", font1, Brushes.Yellow, point1.X/zoomX, (point1.Y - 30)/zoomX);
+                graphic.DrawString("(" + _tl.selfRightPoint.X.ToString() + ",\n" + _tl.selfRightPoint.Y.ToString() + ")", font1, Brushes.Yellow, point2.X/zoomX, (point2.Y - 30)/zoomX);
+                Pen p1 = new Pen(Color.Yellow, 5);
+                graphic.DrawLine(p, 0, 100 / zoomX, 1920 / zoomX, 100 / zoomX);
+                graphic.DrawLine(p, 0, 850 / zoomX, 1920 / zoomX, 850 / zoomX);
+                graphic.DrawString("上边界建议(Y=100)", font1, Brushes.Yellow, 940/zoomX, 80 / zoomX);
+                graphic.DrawString("下边界建议(Y=850)", font1, Brushes.Yellow, 940/zoomX, 830 / zoomX);
+            }
+
         }
 
         private void paintPoint(TrackPoint _tp, bool isOnShow = false)
@@ -532,7 +593,7 @@ namespace DisplaySystem
             Font fontPoint = new Font("微软雅黑", 7.0f, FontStyle.Bold);
             string lineText = _tp.trackPointID.ToString();
             Pen p;
-            if (isOnShow && showFunctionalPoints)
+            if (isOnShow)
             {
                 p = new Pen(Color.Red, 10);
                 graphic.DrawLine(p, (point.X - 5)/zoomX, point.Y/zoomX, (point.X + 5)/zoomX, point.Y/zoomX);
@@ -551,7 +612,7 @@ namespace DisplaySystem
                 graphic.DrawLine(p, (point.X - 4)/zoomX, (point.Y)/zoomX,(point.X + 4)/zoomX, point.Y/zoomX);
             }
             graphic.DrawString(lineText.ToString(), font, Brushes.White, point.X/zoomX, (point.Y - 20)/zoomX);
-            if (pointShown && !isOnShow)
+            if (allPointsShown && !isOnShow)
             {
                 graphic.DrawString("(" +point.X.ToString() + "," + point.Y.ToString() + ")", fontPoint, Brushes.Yellow, point.X/zoomX, (point.Y - 30)/zoomX);
             }
@@ -573,8 +634,10 @@ namespace DisplaySystem
             Font fontPoint = new Font("微软雅黑", 7.0f, FontStyle.Bold);
             string lineText = _s.signalID.ToString();
             Pen p;
+            float textLocation = (point.X - 10);
             if (isOnShow && showFunctionalPoints)
             {
+                lineText += "-封闭";
                 p = new Pen(Color.Red, 20);
                 graphic.DrawLine(p, (point.X - 10) / zoomX, point.Y / zoomX, (point.X + 10) / zoomX, point.Y / zoomX);
             }
@@ -583,8 +646,8 @@ namespace DisplaySystem
                 p = new Pen(Color.Green, 20);
                 graphic.DrawLine(p, (point.X - 10) / zoomX, (point.Y) / zoomX, (point.X + 10) / zoomX, point.Y / zoomX);
             }
-            graphic.DrawString(lineText.ToString(), font, Brushes.White, (point.X - 10) / zoomX, (point.Y - 30) / zoomX);
-            if (pointShown && !isOnShow)
+            graphic.DrawString(lineText.ToString(), font, Brushes.White, textLocation / zoomX, (point.Y - 30) / zoomX);
+            if (allPointsShown && !isOnShow)
             {
                 graphic.DrawString("(" + point.X.ToString() + "," + point.Y.ToString() + ")", fontPoint, Brushes.Yellow, point.X / zoomX, (point.Y - 30) / zoomX);
             }
@@ -600,9 +663,10 @@ namespace DisplaySystem
             {
                 return;
             }
-            Pen p = new Pen(Color.Red, 8);
+            Pen p = new Pen(Color.Purple, 6);
             foreach(TrackLine _tl in _ps.containedTrackLine)
             {
+                /*
                 PointF[] sbxAll = new PointF[]{
                 new PointF(_tl.selfLeftPoint.X/zoomX, (_tl.selfLeftPoint.Y + 15)/zoomX),
                 new PointF(_tl.selfRightPoint.X/zoomX, (_tl.selfRightPoint.Y + 15)/zoomX),
@@ -632,14 +696,29 @@ namespace DisplaySystem
                 {//绘制右半在内
                     graphic.FillPolygon(new SolidBrush(Color.FromArgb(125, Color.LightYellow)), sbxRightIn);
                 }
+                */
+
+                if (_tl.containsInPS == 0)
+                {//绘制全部区域
+                    graphic.DrawLine(p, _tl.selfLeftPoint.X / zoomX, _tl.selfLeftPoint.Y / zoomX, _tl.selfRightPoint.X / zoomX, _tl.selfRightPoint.Y / zoomX);
+                }
+                else if (_tl.containsInPS == 1)
+                {//绘制左半在内
+                    graphic.DrawLine(p, _tl.selfLeftPoint.X / zoomX, _tl.selfLeftPoint.Y / zoomX, (_tl.selfRightPoint.X + _tl.selfLeftPoint.X) /2/ zoomX, (_tl.selfRightPoint.Y + _tl.selfLeftPoint.Y) /2/  zoomX);
+                }
+                else if (_tl.containsInPS == 2)
+                {//绘制右半在内
+                    graphic.DrawLine(p, (_tl.selfRightPoint.X + _tl.selfLeftPoint.X) / 2/ zoomX, (_tl.selfRightPoint.Y + _tl.selfLeftPoint.Y) /2/  zoomX, _tl.selfRightPoint.X / zoomX, _tl.selfRightPoint.Y / zoomX);
+                }
 
             }
+
             Font font = new Font("微软雅黑", 10.0f, FontStyle.Bold);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            //showFunctionalPoints = !showFunctionalPoints;
+            showFunctionalPoints = !showFunctionalPoints;
             this.Refresh();
         }
 
@@ -737,14 +816,20 @@ namespace DisplaySystem
 
         private void showPoint_btn_Click(object sender, EventArgs e)
         {
-            if (!pointShown)
+            if (!pointShown && !allPointsShown)
             {
                 pointShown = true;
+                this.Refresh();
+            }
+            else if(pointShown && !allPointsShown)
+            {
+                allPointsShown = true;
                 this.Refresh();
             }
             else
             {
                 pointShown = false;
+                allPointsShown = false;
                 this.Refresh();
             }
         }
@@ -768,9 +853,14 @@ namespace DisplaySystem
             modifyPowerSupplyModel_btn.Location = new Point(16, this.Height - 240);
             showPoint_btn.Location = new Point(16, this.Height - 280);
             save_btn.Location = new Point(16, this.Height - 320);
-            title_tb.Location = new Point(16, this.Height - 350);
-            label1.Location = new Point(16, this.Height - 365);
+            startTrackNum_tb.Location = new Point(16, this.Height - 350);
+            label3.Location = new Point(56, this.Height - 350);
+            stopTrackNum_tb.Location = new Point(76, this.Height - 350);
+            label2.Location = new Point(16, this.Height - 375);
+            title_tb.Location = new Point(16, this.Height - 405);
+            label1.Location = new Point(16, this.Height - 430);
             title_lbl.Location = new Point((this.Width / 2)-(title_lbl.Text.Length*35), 30);
+            
         }
 
         private void Main_Resize(object sender, EventArgs e)
@@ -795,6 +885,38 @@ namespace DisplaySystem
             RelocateButtons();
         }
 
+        private void startTrackNum_tb_TextChanged(object sender, EventArgs e)
+        {
+            int result = 0;
+            if(int.TryParse(startTrackNum_tb.Text,out result))
+            {
+                startTrackNum = result;
+            }
+        }
 
+        private void startTrackNum_tb_KeyPress(object sender, KeyPressEventArgs e)
+        {
+                if (e.KeyChar != 8 && !Char.IsDigit(e.KeyChar))
+                {
+                    e.Handled = true;
+                }
+        }
+
+        private void stopTrackNum_tb_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar != 8 && !Char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void stopTrackNum_tb_TextChanged(object sender, EventArgs e)
+        {
+            int result = 0;
+            if (int.TryParse(stopTrackNum_tb.Text, out result))
+            {
+                stopTrackNum = result;
+            }
+        }
     }
 }

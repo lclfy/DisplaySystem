@@ -48,6 +48,14 @@ namespace DisplaySystem
                     lvi.SubItems.Add(_tLine.rightTrackPoint.trackPointID.ToString());
                     tempRPoint = _tLine.rightTrackPoint;
                 }
+                if (_tLine.leftWayTo == null)
+                {
+                    _tLine.leftWayTo = "";
+                }
+                if (_tLine.rightWayTo == null)
+                {
+                    _tLine.rightWayTo = "";
+                }
                 TrackLine_lv.Items.Add(lvi);
             }
             TrackLine_lv.Update();
@@ -151,6 +159,14 @@ namespace DisplaySystem
                     {
                         tLine.RemoveAt(TrackLine_lv.SelectedItems[0].Index);
                     }
+                    if(leftWayTo_tb.Text.Length != 0)
+                    {
+                        _tl.leftWayTo = leftWayTo_tb.Text;
+                    }
+                    if (rightWayTo_tb.Text.Length != 0)
+                    {
+                        _tl.rightWayTo = rightWayTo_tb.Text;
+                    }
                     tLine.Add(_tl);
                     tLine.Sort();
                     removeText();
@@ -179,6 +195,8 @@ namespace DisplaySystem
             rightY_tb.Text = "";
             lPoint_tb.Text = "";
             rPoint_tb.Text = "";
+            leftWayTo_tb.Text = "";
+            rightWayTo_tb.Text = "";
         }
 
         private void deleteBtn_Click(object sender, EventArgs e)
@@ -204,6 +222,8 @@ namespace DisplaySystem
                 leftY_tb.Text = _tl.selfLeftPoint.Y.ToString();
                 rightX_tb.Text = _tl.selfRightPoint.X.ToString();
                 rightY_tb.Text = _tl.selfRightPoint.Y.ToString();
+                leftWayTo_tb.Text = _tl.leftWayTo;
+                rightWayTo_tb.Text = _tl.rightWayTo;
                 if(_tl.leftTrackPoint != null)
                 {
                     lPoint_tb.Text = _tl.leftTrackPoint.trackPointID.ToString();
@@ -289,6 +309,11 @@ namespace DisplaySystem
             main.tLine = this.tLine;
             main.selfPaint();
             main.Refresh();
+        }
+
+        private void leftWayTo_tb_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

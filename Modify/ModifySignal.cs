@@ -44,18 +44,22 @@ namespace DisplaySystem.Modify
 
         private void x_tb_KeyPress(object sender, KeyPressEventArgs e)
         {
+            /*
             if (e.KeyChar != 8 && !Char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
             }
+            */
         }
 
         private void y_tb_KeyPress(object sender, KeyPressEventArgs e)
         {
+            /*
             if (e.KeyChar != 8 && !Char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
             }
+            */
         }
 
         private void SaveBtn_Click(object sender, EventArgs e)
@@ -71,6 +75,10 @@ namespace DisplaySystem.Modify
                         Signal _tp = new Signal();
                         _tp.signalID = id_tb.Text.ToString();
                         _tp.signalPoint = new Point(int.Parse(x_tb.Text), int.Parse(y_tb.Text));
+                        if(tips_tb.Text.Length != 0)
+                        {
+                            _tp.tip = tips_tb.Text.ToString();
+                        }
                         if (radioButton1.Checked)
                         {
                             _tp.signalDir = 0;
@@ -86,6 +94,7 @@ namespace DisplaySystem.Modify
                         Signal _tp = new Signal();
                         _tp.signalID = id_tb.Text.ToString();
                         _tp.signalPoint = new Point(int.Parse(x_tb.Text), int.Parse(y_tb.Text));
+                        _tp.tip = tips_tb.Text.ToString();
                         if (radioButton1.Checked)
                         {
                             _tp.signalDir = 0;
@@ -117,6 +126,7 @@ namespace DisplaySystem.Modify
             id_tb.Text = "";
             x_tb.Text = "";
             y_tb.Text = "";
+            tips_tb.Text = "";
         }
 
         private void TrackPointListView_SelectedIndexChanged(object sender, EventArgs e)
@@ -128,6 +138,7 @@ namespace DisplaySystem.Modify
                 id_tb.Text = _tp.signalID.ToString();
                 x_tb.Text = _tp.signalPoint.X.ToString();
                 y_tb.Text = _tp.signalPoint.Y.ToString();
+                tips_tb.Text = _tp.tip.ToString();
             }
             else
             {
@@ -149,6 +160,11 @@ namespace DisplaySystem.Modify
         {
             main.signal = this.signal;
             main.Refresh();
+        }
+
+        private void x_tb_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

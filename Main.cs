@@ -32,9 +32,15 @@ namespace DisplaySystem
         bool showSettings = false;
         bool showFunctionalPoints = true;
         float zoomX = 0;
-        public string shownPowerSupplyModelName = "";
+        public List<string> shownPowerSupplyModelName = new List<string>();
         int startTrackNum = 0;
         int stopTrackNum = 0;
+        float zoomCount = 1;
+        Point mouseOff = new Point();
+        public Point movingPixels = new Point();
+        public Point lastMovingPlace = new Point();
+        bool leftFlag = false;
+        bool checkSignalAndPS = false;
 
         public Main()
         {
@@ -62,6 +68,30 @@ namespace DisplaySystem
             zoomX = (float)(1920.0/SW);
             this.Size = new Size(SW, SH);
 
+        }
+
+        private float transformScreenOffsets(int arg, bool XorY)
+        {//计算屏幕偏移量绘制坐标
+            if (XorY)
+            {//是X
+                return (arg / zoomX) + movingPixels.X;
+            }
+            else
+            {
+                return (arg / zoomX) + movingPixels.Y;
+            }
+        }
+
+        private float transformScreenOffsets(float arg, bool XorY)
+        {//计算屏幕偏移量绘制坐标
+            if (XorY)
+            {//是X
+                return (arg / zoomX) + movingPixels.X;
+            }
+            else
+            {
+                return (arg / zoomX) + movingPixels.Y;
+            }
         }
 
         public void checkEmptyObject()
@@ -125,6 +155,8 @@ namespace DisplaySystem
                 }
 
             }
+
+            
         
             //检查点里面有没有无用线
             for(int iPoint  = 0;iPoint <tPoint.Count; iPoint++)
@@ -316,6 +348,13 @@ namespace DisplaySystem
             {
                 psModel = new List<PowerSupplyModel>();
             }
+            foreach(PowerSupplyModel _ps in psModel)
+            {
+                if(_ps.powerSupplyRange == null)
+                {
+                    _ps.powerSupplyRange = "";
+                }
+            }
             try
             {
                 tLine = _data.tLine;
@@ -331,6 +370,13 @@ namespace DisplaySystem
             catch (Exception e)
             {
                 signal = new List<Signal>();
+            }
+            foreach(Signal _s in signal)
+            {
+                if(_s.tip == null)
+                {
+                    _s.tip = "";
+                }
             }
             if (_data.title != null)
             {
@@ -412,7 +458,7 @@ namespace DisplaySystem
             {
                 Button btn = new Button();
                 btn.Parent = buttons_pnl;
-                btn.Size = new Size(150,80);
+                btn.Size = new Size(150,65);
                 btn.Location = new Point(400 + 170*count, this.Height - 200);
                 btn.BackColor = Color.White;
                 btn.Name = _ps.powerSupplyID.ToString();
@@ -448,12 +494,34 @@ namespace DisplaySystem
         {//点击相应供电臂后绘制相应内容
             //MessageBox.Show("" + ((Button)sender).Name);
             string name = ((Button)sender).Text;
-            ((Button)sender).BackColor = Color.Red;
-            ((Button)sender).ForeColor = Color.White;
-            shownPowerSupplyModelName = name;
-            foreach(Button btn in allButtons)
+            bool isOpening = false;
+            foreach(string _name in shownPowerSupplyModelName)
+            {//如果有的话说明已经添加过了
+                if (_name.Equals(name))
+                {
+                    isOpening = true;
+                    shownPowerSupplyModelName.Remove(_name);
+                    break;
+                }
+            }
+            if (!isOpening)
             {
-                if (!btn.Text.Equals(name))
+                shownPowerSupplyModelName.Add(name);
+                ((Button)sender).BackColor = Color.Red;
+                ((Button)sender).ForeColor = Color.White;
+            }
+            foreach(Button btn in allButtons)
+            {//检查其他按钮情况
+                bool hasGotIt = false;
+                foreach(string _name in shownPowerSupplyModelName)
+                {
+                    if (btn.Text.Equals(_name))
+                    {
+                        hasGotIt = true;
+                        break;
+                    }
+                }
+                if (!hasGotIt)
                 {
                     btn.BackColor = Color.White;
                     btn.ForeColor = Color.Black;
@@ -531,8 +599,8 @@ namespace DisplaySystem
             Point point1 = _tl.selfLeftPoint;
             Point point2 = _tl.selfRightPoint;
             String pointText = _tl.trackLineID.ToString();
-            Pen p = new Pen(Color.White, 3);
-            graphic.DrawLine(p, point1.X/zoomX,point1.Y/zoomX,point2.X/zoomX, point2.Y/zoomX);
+            Pen p = new Pen(Color.Gray, 3);
+            graphic.DrawLine(p, transformScreenOffsets(point1.X,true), transformScreenOffsets(point1.Y,false), transformScreenOffsets(point2.X,true), transformScreenOffsets(point2.Y,false));
             Font font = new Font("微软雅黑", 10.0f, FontStyle.Bold);
             //graphic.DrawString(pointText, base.Font, Brushes.White, 0, 0, new StringFormat(StringFormatFlags.DirectionVertical));
             Font font1 = new Font("微软雅黑", 8.0f, FontStyle.Bold);
@@ -544,35 +612,37 @@ namespace DisplaySystem
 
             if (_tl.leftWayTo != null &&_tl.leftWayTo.Length != 0)
             {
-                graphic.DrawString("⇋ " + _tl.leftWayTo + " ↴", font2, Brushes.Green, (point1.X-40) / zoomX, (((point1.Y + point2.Y) / 2) - 35) / zoomX);
+                graphic.DrawString("⇋ " + _tl.leftWayTo, font2, Brushes.Green, transformScreenOffsets(point1.X-40,true), transformScreenOffsets((((point1.Y + point2.Y) / 2) - 35),false));
             }
             if (_tl.rightWayTo != null &&_tl.rightWayTo.Length != 0)
             {
-                graphic.DrawString("↴ " +_tl.rightWayTo + "⇌", font2, Brushes.Green, (point2.X-40) / zoomX, (((point1.Y + point2.Y) / 2) - 35) / zoomX);
+                graphic.DrawString(_tl.rightWayTo + "⇌", font2, Brushes.Green, transformScreenOffsets(point2.X-40,true), transformScreenOffsets((((point1.Y + point2.Y) / 2) - 35),false));
             }
             if (startTrackNum <= _tl.trackLineID && _tl.trackLineID <= stopTrackNum )
             {
                 //真正的站台字符画中间
-                graphic.DrawString(pointText, font, Brushes.White, ((1920 /2)-20)/ zoomX, (((point1.Y + point2.Y) / 2) - 20) / zoomX);
+                graphic.DrawString(pointText, font, Brushes.White, transformScreenOffsets(((1920 /2)-20),true), transformScreenOffsets((((point1.Y + point2.Y) / 2) - 20),false));
                 hasGotIt = true;
             }
             if(startTrackNum == 0 && stopTrackNum == 0)
             {
-                graphic.DrawString(pointText, font, Brushes.White, ((point1.X + point2.X) / 2) / zoomX, (((point1.Y + point2.Y) / 2) - 20) / zoomX);
+                graphic.DrawString(pointText, font, Brushes.White, transformScreenOffsets(((point1.X + point2.X) / 2),true), transformScreenOffsets((((point1.Y + point2.Y) / 2) - 20),false));
             }
             if (pointShown)
             {//绘制坐标&有效绘画区域
                 if (!hasGotIt)
                 {
-                    graphic.DrawString(pointText, font, Brushes.White, ((point1.X + point2.X) / 2) / zoomX, (((point1.Y + point2.Y) / 2) - 20) / zoomX);
+                    graphic.DrawString(pointText, font, Brushes.White, transformScreenOffsets(((point1.X + point2.X) / 2),true), transformScreenOffsets((((point1.Y + point2.Y) / 2) - 20),false));
                 }
-                graphic.DrawString("(" + _tl.selfLeftPoint.X.ToString() + ",\n" + _tl.selfLeftPoint.Y.ToString() + ")", font1, Brushes.Yellow, point1.X/zoomX, (point1.Y - 30)/zoomX);
-                graphic.DrawString("(" + _tl.selfRightPoint.X.ToString() + ",\n" + _tl.selfRightPoint.Y.ToString() + ")", font1, Brushes.Yellow, point2.X/zoomX, (point2.Y - 30)/zoomX);
+                graphic.DrawString("(" + _tl.selfLeftPoint.X.ToString() + ",\n" + _tl.selfLeftPoint.Y.ToString() + ")", font1, Brushes.Yellow, transformScreenOffsets(point1.X,true), transformScreenOffsets((point1.Y - 30),false));
+                graphic.DrawString("(" + _tl.selfRightPoint.X.ToString() + ",\n" + _tl.selfRightPoint.Y.ToString() + ")", font1, Brushes.Yellow, transformScreenOffsets(point2.X,true), transformScreenOffsets((point2.Y - 30),false));
                 Pen p1 = new Pen(Color.Yellow, 5);
+                /*
                 graphic.DrawLine(p, 0, 100 / zoomX, 1920 / zoomX, 100 / zoomX);
                 graphic.DrawLine(p, 0, 850 / zoomX, 1920 / zoomX, 850 / zoomX);
                 graphic.DrawString("上边界建议(Y=100)", font1, Brushes.Yellow, 940/zoomX, 80 / zoomX);
                 graphic.DrawString("下边界建议(Y=850)", font1, Brushes.Yellow, 940/zoomX, 830 / zoomX);
+                */
             }
 
         }
@@ -593,28 +663,28 @@ namespace DisplaySystem
             Font fontPoint = new Font("微软雅黑", 7.0f, FontStyle.Bold);
             string lineText = _tp.trackPointID.ToString();
             Pen p;
-            if (isOnShow)
-            {
-                p = new Pen(Color.Red, 10);
-                graphic.DrawLine(p, (point.X - 5)/zoomX, point.Y/zoomX, (point.X + 5)/zoomX, point.Y/zoomX);
-                if (_tp.switchDirection == 1)
+                if (isOnShow)
                 {
-                    graphic.DrawString("锁定位", font1, Brushes.Yellow, (point.X - 10)/zoomX, (point.Y - 30)/zoomX);
-                }
-                else if (_tp.switchDirection == 2)
+                    p = new Pen(Color.Red, 10);
+                    graphic.DrawLine(p, transformScreenOffsets((point.X - 5),true), transformScreenOffsets(point.Y ,false), transformScreenOffsets((point.X + 5),true), transformScreenOffsets(point.Y ,false));
+                    if (_tp.switchDirection == 1)
+                    {
+                        graphic.DrawString("锁定位", font1, Brushes.Yellow, transformScreenOffsets((point.X - 10),true), transformScreenOffsets((point.Y + 10),false));
+                    }
+                    else if (_tp.switchDirection == 2)
+                    {
+                        graphic.DrawString("锁反位", font1, Brushes.Yellow, transformScreenOffsets((point.X) ,true), transformScreenOffsets((point.Y + 10) ,false));
+                    }
+                else
                 {
-                    graphic.DrawString("锁反位", font1, Brushes.Yellow, (point.X)/zoomX, (point.Y - 30)/zoomX);
+                    p = new Pen(Color.Green, 8);
+                    graphic.DrawLine(p, transformScreenOffsets((point.X - 4),true), transformScreenOffsets((point.Y),false), transformScreenOffsets((point.X + 4),true), transformScreenOffsets(point.Y,false));
                 }
             }
-            else
-            {
-                p = new Pen(Color.Green, 8);
-                graphic.DrawLine(p, (point.X - 4)/zoomX, (point.Y)/zoomX,(point.X + 4)/zoomX, point.Y/zoomX);
-            }
-            graphic.DrawString(lineText.ToString(), font, Brushes.White, point.X/zoomX, (point.Y - 20)/zoomX);
+            graphic.DrawString(lineText.ToString(), font, Brushes.White, transformScreenOffsets(point.X,true), transformScreenOffsets((point.Y - 20),false));
             if (allPointsShown && !isOnShow)
             {
-                graphic.DrawString("(" +point.X.ToString() + "," + point.Y.ToString() + ")", fontPoint, Brushes.Yellow, point.X/zoomX, (point.Y - 30)/zoomX);
+                graphic.DrawString("(" +point.X.ToString() + "," + point.Y.ToString() + ")", fontPoint, Brushes.Yellow, transformScreenOffsets(point.X,true), transformScreenOffsets((point.Y - 30),false));
             }
         }
 
@@ -635,21 +705,22 @@ namespace DisplaySystem
             string lineText = _s.signalID.ToString();
             Pen p;
             float textLocation = (point.X - 10);
-            if (isOnShow && showFunctionalPoints)
-            {
-                lineText += "-封闭";
-                p = new Pen(Color.Red, 20);
-                graphic.DrawLine(p, (point.X - 10) / zoomX, point.Y / zoomX, (point.X + 10) / zoomX, point.Y / zoomX);
-            }
-            else
-            {
-                p = new Pen(Color.Green, 20);
-                graphic.DrawLine(p, (point.X - 10) / zoomX, (point.Y) / zoomX, (point.X + 10) / zoomX, point.Y / zoomX);
-            }
-            graphic.DrawString(lineText.ToString(), font, Brushes.White, textLocation / zoomX, (point.Y - 30) / zoomX);
+
+                if (isOnShow && showFunctionalPoints)
+                {
+                    lineText += "-封闭";
+                    p = new Pen(Color.Red, 20);
+                    graphic.DrawLine(p, transformScreenOffsets((point.X - 10) ,true), transformScreenOffsets(point.Y,false), transformScreenOffsets((point.X + 10) ,true), transformScreenOffsets(point.Y ,false));
+                }
+                else
+                {
+                    p = new Pen(Color.Green, 20);
+                    graphic.DrawLine(p, transformScreenOffsets((point.X - 10),true), transformScreenOffsets((point.Y),false), transformScreenOffsets((point.X + 10) ,true), transformScreenOffsets(point.Y,false));
+                }
+            graphic.DrawString(lineText.ToString(), font, Brushes.White, transformScreenOffsets(textLocation ,true), transformScreenOffsets((point.Y - 25),false));
             if (allPointsShown && !isOnShow)
             {
-                graphic.DrawString("(" + point.X.ToString() + "," + point.Y.ToString() + ")", fontPoint, Brushes.Yellow, point.X / zoomX, (point.Y - 30) / zoomX);
+                graphic.DrawString("(" + point.X.ToString() + "," + point.Y.ToString() + ")", fontPoint, Brushes.Yellow, transformScreenOffsets(point.X,true), transformScreenOffsets((point.Y - 25),false));
             }
         }
 
@@ -700,15 +771,15 @@ namespace DisplaySystem
 
                 if (_tl.containsInPS == 0)
                 {//绘制全部区域
-                    graphic.DrawLine(p, _tl.selfLeftPoint.X / zoomX, _tl.selfLeftPoint.Y / zoomX, _tl.selfRightPoint.X / zoomX, _tl.selfRightPoint.Y / zoomX);
+                    graphic.DrawLine(p, transformScreenOffsets(_tl.selfLeftPoint.X ,true), transformScreenOffsets(_tl.selfLeftPoint.Y,false), transformScreenOffsets(_tl.selfRightPoint.X ,true), transformScreenOffsets(_tl.selfRightPoint.Y ,false));
                 }
                 else if (_tl.containsInPS == 1)
                 {//绘制左半在内
-                    graphic.DrawLine(p, _tl.selfLeftPoint.X / zoomX, _tl.selfLeftPoint.Y / zoomX, (_tl.selfRightPoint.X + _tl.selfLeftPoint.X) /2/ zoomX, (_tl.selfRightPoint.Y + _tl.selfLeftPoint.Y) /2/  zoomX);
+                    graphic.DrawLine(p, transformScreenOffsets(_tl.selfLeftPoint.X,true), transformScreenOffsets(_tl.selfLeftPoint.Y,false), transformScreenOffsets((_tl.selfRightPoint.X + _tl.selfLeftPoint.X) /2,true), transformScreenOffsets((_tl.selfRightPoint.Y + _tl.selfLeftPoint.Y) /2,false));
                 }
                 else if (_tl.containsInPS == 2)
                 {//绘制右半在内
-                    graphic.DrawLine(p, (_tl.selfRightPoint.X + _tl.selfLeftPoint.X) / 2/ zoomX, (_tl.selfRightPoint.Y + _tl.selfLeftPoint.Y) /2/  zoomX, _tl.selfRightPoint.X / zoomX, _tl.selfRightPoint.Y / zoomX);
+                    graphic.DrawLine(p, transformScreenOffsets((_tl.selfRightPoint.X + _tl.selfLeftPoint.X) / 2,true), transformScreenOffsets((_tl.selfRightPoint.Y + _tl.selfLeftPoint.Y) /2,false), transformScreenOffsets(_tl.selfRightPoint.X ,true), transformScreenOffsets(_tl.selfRightPoint.Y ,false));
                 }
 
             }
@@ -722,7 +793,7 @@ namespace DisplaySystem
             this.Refresh();
         }
 
-        public void selfPaint(Graphics g = null)
+        public void selfPaint(bool mouseMovingPaint = false, Graphics g = null)
         {
 
             if (graphic== null)
@@ -735,11 +806,28 @@ namespace DisplaySystem
                 {
                     graphic = g;
                 }
-
             }
             foreach (TrackLine _tl in tLine)
             {
                 paintLine(_tl);
+            }
+            foreach (PowerSupplyModel _ps in psModel)
+            {
+                foreach (string _name in shownPowerSupplyModelName)
+                {
+                    if (_ps.powerSupplyName.Equals(_name))
+                    {
+                        paintPowerSupply(_ps);
+                        foreach (TrackPoint _tp in _ps.containedTrackPoint)
+                        {
+                            paintPoint(_tp, true);
+                        }
+                        foreach (Signal _s in _ps.functionalTrackPoint)
+                        {
+                            paintSignalTower(_s, true);
+                        }
+                    }
+                }
             }
             foreach (TrackPoint _tp in tPoint)
             {
@@ -747,31 +835,33 @@ namespace DisplaySystem
             }
             foreach(Signal _s in signal)
             {
-                paintSignalTower(_s);
+                paintSignalTower(_s,false);
             }
-            foreach(PowerSupplyModel _ps in psModel)
+            foreach (PowerSupplyModel _ps in psModel)
             {
-                if (_ps.powerSupplyName.Equals(shownPowerSupplyModelName))
+                foreach (string _name in shownPowerSupplyModelName)
                 {
-                    paintPowerSupply(_ps);
-                    foreach(TrackPoint _tp in _ps.containedTrackPoint)
+                    if (_ps.powerSupplyName.Equals(_name))
                     {
-                        paintPoint(_tp, true);
-                    }
-                    foreach(Signal _s in _ps.functionalTrackPoint)
-                    {
-                        paintSignalTower(_s, true);
+                        foreach (TrackPoint _tp in _ps.containedTrackPoint)
+                        {
+                            paintPoint(_tp, true);
+                        }
+                        foreach (Signal _s in _ps.functionalTrackPoint)
+                        {
+                            paintSignalTower(_s, true);
+                        }
                     }
                 }
             }
-            
+
         }
 
         private void Main_Paint(object sender, PaintEventArgs e)
         {
             graphic = e.Graphics;
             graphic.TranslateTransform(this.AutoScrollPosition.X, this.AutoScrollPosition.Y);
-            selfPaint(e.Graphics);
+            selfPaint(false,e.Graphics);
         }
 
 
@@ -841,9 +931,31 @@ namespace DisplaySystem
             {
                 return;
             }
+            int countMinus = 0;
             foreach (Button btn in allButtons)
             {
-                btn.Location = new Point((this.Width - 170*allButtons.Count)/2 + 170 * count, this.Height-(int)(this.Height*0.2));
+                if((zoomX == 1 && count <= 8)||(zoomX > 1 && count <= 6)||(zoomX < 1 && count <= 12))
+                {
+                    if(zoomX == 1 && allButtons.Count > 8)
+                    {
+                        countMinus = 8;
+                    }else if(zoomX > 1 && allButtons.Count > 6)
+                    {
+                        countMinus = 6;
+                    }else if(zoomX < 1 && allButtons.Count > 12)
+                    {
+                        countMinus = 12;
+                    }
+                    else
+                    {
+                        countMinus = allButtons.Count;
+                    }
+                    btn.Location = new Point((this.Width - 170 * countMinus) / 2 + 170 * count, this.Height - (int)(this.Height * 0.2));
+                }
+                else if((zoomX == 1 && count > 8) || (zoomX > 1 && count > 6 ) || (zoomX < 1 && count > 12 ))
+                {
+                    btn.Location = new Point((this.Width - 170 * (allButtons.Count - countMinus -1)) / 2 + 170 * (count-countMinus-1), this.Height - (int)(this.Height * 0.2) + 70);
+                }
                 count++;
             }
             setting_btn.Location = new Point(16,  this.Height - 80);
@@ -859,8 +971,110 @@ namespace DisplaySystem
             label2.Location = new Point(16, this.Height - 375);
             title_tb.Location = new Point(16, this.Height - 405);
             label1.Location = new Point(16, this.Height - 430);
-            title_lbl.Location = new Point((this.Width / 2)-(title_lbl.Text.Length*35), 30);
-            
+            title_lbl.Location = new Point((this.Width / 2)-(title_lbl.Text.Length*35), 30);  
+        }
+
+        private void findMouseMovingSignalAndPS(int mouseX, int mouseY)
+        {//寻找鼠标经过的信号机和供电臂
+         //先找信号机
+            //mousePoint_lbl.Text = "当前：";
+            bool hasGotIt = false;
+            foreach (Signal _s in signal)
+            {
+                Point point = _s.signalPoint;
+                //X1Y1 = leftX , Y - 10; X1Y2 = leftX , Y + 10; X2Y1 = rightX , Y - 10 ; X2Y2 = rightX, Y + 10;
+                //如果鼠标在该框内，则 mouseX > leftX && mouseX < rightX && mouseY > Y - 10 && mouseY < Y + 10
+                if (mouseX >= transformScreenOffsets((point.X - 10) ,true) &&
+                    mouseX <= transformScreenOffsets((point.X + 10) ,true) &&
+                    mouseY >= transformScreenOffsets((point.Y - 10) ,false)&&
+                    mouseY <= transformScreenOffsets((point.Y + 10) ,false))
+                {
+                    hasGotIt = true;
+                    string tip = "";
+                    if(_s.tip.Length == 0)
+                    {
+                        tip = "未注明";
+                    }
+                    else
+                    {
+                        tip = _s.tip;
+                    }
+                    mousePoint_lbl.Text = "当前："+_s.signalID + "信号机"+"\n公里标："+tip;
+                }
+                if (hasGotIt)
+                {
+                    break;
+                }
+            }
+            if (!hasGotIt)
+            {//找供电臂
+                foreach(PowerSupplyModel _ps in psModel)
+                {//找供电臂内的线
+                    foreach (TrackLine _tLine in _ps.containedTrackLine)
+                    {//如果鼠标在该框内，则 mouseX > leftX && mouseX < rightX && mouseY > lowY && mouseY < highY
+                        //如果…填写的时候左右是反的 就把它反过来
+                        Point realLeftPoint = new Point();
+                        Point realRightPoint = new Point();
+                        if(_tLine.selfLeftPoint.X > _tLine.selfRightPoint.X)
+                        {
+                            realLeftPoint = _tLine.selfRightPoint;
+                            realRightPoint = _tLine.selfLeftPoint;
+                        }
+                        else
+                        {
+                            realLeftPoint = _tLine.selfLeftPoint;
+                            realRightPoint = _tLine.selfRightPoint;
+                        }
+                        string range = "";
+                        if (realLeftPoint.Y < realRightPoint.Y)
+                        {//左（数值）低右（数值）高
+                            if(mouseX >= transformScreenOffsets(realLeftPoint.X ,true) && mouseX <= transformScreenOffsets(realRightPoint.X ,true) && mouseY > transformScreenOffsets(realLeftPoint.Y ,false) && mouseY < transformScreenOffsets(realRightPoint.Y,false))
+                            {
+                                if(_ps.powerSupplyRange.Length == 0)
+                                {
+                                    range = "未注明";
+                                }
+                                else
+                                {
+                                    range = _ps.powerSupplyRange;
+                                }
+                                mousePoint_lbl.Text = "当前供电臂：" + _ps.powerSupplyName + "；\n供电范围："+ range;
+                            }
+                        }
+                        else if (realLeftPoint.Y > realRightPoint.Y)
+                        {
+                            if (_ps.powerSupplyRange.Length == 0)
+                            {
+                                range = "未注明";
+                            }
+                            else
+                            {
+                                range = _ps.powerSupplyRange;
+                            }
+                            if (mouseX >= transformScreenOffsets(realLeftPoint.X ,true) && mouseX <= transformScreenOffsets(realRightPoint.X,true) && mouseY < transformScreenOffsets(realLeftPoint.Y,false) && mouseY > transformScreenOffsets(realRightPoint.Y,false))
+                            {
+                                mousePoint_lbl.Text = "当前供电臂：" + _ps.powerSupplyName + "\n供电范围："+range;
+                            }
+                        }
+                        else if(realLeftPoint.Y == realRightPoint.Y)
+                        {//一样高的时候
+                            if (_ps.powerSupplyRange.Length == 0)
+                            {
+                                range = "未注明";
+                            }
+                            else
+                            {
+                                range = _ps.powerSupplyRange;
+                            }
+                            if (mouseX >= transformScreenOffsets(realLeftPoint.X ,true) && mouseX <= transformScreenOffsets(realRightPoint.X ,true) && mouseY < transformScreenOffsets((realLeftPoint.Y + 15),false) &&mouseY > transformScreenOffsets((realLeftPoint.Y - 15) ,false))
+                            {
+                                mousePoint_lbl.Text = "当前供电臂：" + _ps.powerSupplyName + "\n供电范围："+range;
+                            }
+                        }
+                    }
+                }
+            }
+
         }
 
         private void Main_Resize(object sender, EventArgs e)
@@ -917,6 +1131,73 @@ namespace DisplaySystem
             {
                 stopTrackNum = result;
             }
+        }
+
+        private void zoomIn_btn_Click(object sender, EventArgs e)
+        {
+            zoomX = zoomX / 1.1f;
+            zoomCount = zoomCount * 1.1f;
+            label4.Text = "放大/缩小（当前："+zoomCount.ToString()+"倍）";
+        }
+
+        private void zoomOut_btn_Click(object sender, EventArgs e)
+        {
+            zoomX = zoomX * 1.1f;
+            zoomCount = zoomCount / 1.1f;
+            label4.Text = "放大/缩小（当前：" + zoomCount.ToString() + "倍）";
+        }
+
+        private void Main_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                mouseOff = new Point(-e.X, -e.Y);
+                leftFlag = true;
+                timer1.Interval = 50;
+            }
+            else if(e.Button == MouseButtons.Right)
+            {
+                findMouseMovingSignalAndPS(e.X, e.Y);
+            }
+        }
+
+        private void Main_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (leftFlag)
+            {
+                leftFlag = false;
+            }
+        }
+
+        private void Main_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (leftFlag)
+            {
+                Point mouseSet = Control.MousePosition;
+                movingPixels.X = lastMovingPlace.X + mouseSet.X + mouseOff.X;
+                movingPixels.Y = lastMovingPlace.Y + (mouseSet.Y-20) + mouseOff.Y;
+                mouseSet.Offset(mouseOff.X, mouseOff.Y);
+                Location = mouseSet;
+                checkSignalAndPS = false;
+            }
+            else
+            {
+                checkSignalAndPS = true;
+                lastMovingPlace = movingPixels;
+                timer1.Interval = 1000;
+            }
+            if (checkSignalAndPS == true)
+            {
+                findMouseMovingSignalAndPS(e.X,e.Y);
+            }
+        }
+
+        private void resetPlace_btn_Click(object sender, EventArgs e)
+        {
+            lastMovingPlace.X = 0;
+            lastMovingPlace.Y = 0;
+            movingPixels.X = 0;
+            movingPixels.Y = 0;
         }
     }
 }

@@ -82,34 +82,42 @@ namespace DisplaySystem
 
         private void leftX_tb_KeyPress(object sender, KeyPressEventArgs e)
         {
+            /*
             if (e.KeyChar != 8 && !Char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
             }
+            */
         }
 
         private void leftY_tb_KeyPress(object sender, KeyPressEventArgs e)
         {
+            /*
             if (e.KeyChar != 8 && !Char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
             }
+            */
         }
 
         private void rightX_tb_KeyPress(object sender, KeyPressEventArgs e)
         {
+            /*
             if (e.KeyChar != 8 && !Char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
             }
+            */
         }
 
         private void rightY_tb_KeyPress(object sender, KeyPressEventArgs e)
         {
+            /*
             if (e.KeyChar != 8 && !Char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
             }
+            */
         }
 
         private void lPoint_tb_KeyPress(object sender, KeyPressEventArgs e)

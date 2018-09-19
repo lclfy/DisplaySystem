@@ -17,5 +17,7 @@ namespace DisplaySystem
         public List<TrackPoint> containedTrackPoint { get; set; }
         //信号机
         public List<Signal> functionalTrackPoint { get; set; }
+        //供电范围
+        public string powerSupplyRange { get; set; }
     }
 }

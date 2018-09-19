@@ -41,6 +41,7 @@ namespace DisplaySystem.Modify
             {
                 ListViewItem lvi = new ListViewItem(_psModel.powerSupplyID.ToString());
                 lvi.SubItems.Add(_psModel.powerSupplyName.ToString());
+                lvi.SubItems.Add(_psModel.powerSupplyRange.ToString());
                 ps_lv.Items.Add(lvi);
             }
             ps_lv.Update();
@@ -194,6 +195,7 @@ namespace DisplaySystem.Modify
         {
             id_tb.Text = "";
             name_tb.Text = "";
+            psRange_tb.Text = "";
             containPoints_lv.Items.Clear();
             containTracks_lv.Items.Clear();
             containsFunctionalPoints_lv.Items.Clear();
@@ -209,6 +211,7 @@ namespace DisplaySystem.Modify
                     PowerSupplyModel _psModel = new PowerSupplyModel();
                     _psModel.powerSupplyID = int.Parse(id_tb.Text);
                     _psModel.powerSupplyName = name_tb.Text;
+                    _psModel.powerSupplyRange = psRange_tb.Text;
                     List<TrackPoint> _tpList = new List<TrackPoint>();
                     List<TrackLine> _tlList = new List<TrackLine>();
                     List<Signal> _signalList = new List<Signal>();
@@ -295,6 +298,7 @@ namespace DisplaySystem.Modify
             {
                 id_tb.Text = ps_lv.SelectedItems[0].SubItems[0].Text;
                 name_tb.Text = ps_lv.SelectedItems[0].SubItems[1].Text;
+                psRange_tb.Text = ps_lv.SelectedItems[0].SubItems[2].Text;
                 refreshListViews(psModel[ps_lv.SelectedItems[0].Index]);
             }
         }

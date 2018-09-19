@@ -61,18 +61,22 @@ namespace DisplaySystem.Modify
 
         private void x_tb_KeyPress(object sender, KeyPressEventArgs e)
         {
+            /*
             if (e.KeyChar != 8 && !Char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
             }
+            */
         }
 
         private void y_tb_KeyPress(object sender, KeyPressEventArgs e)
         {
+            /*
             if (e.KeyChar != 8 && !Char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
             }
+            */
         }
 
         private void p1_tb_KeyPress(object sender, KeyPressEventArgs e)

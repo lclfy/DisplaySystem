@@ -1,6 +1,6 @@
 ﻿namespace DisplaySystem
 {
-    partial class Main
+    partial class Display
     {
         /// <summary>
         /// 必需的设计器变量。

@@ -11,10 +11,10 @@ namespace DisplaySystem.Modify
     public partial class ModifyTrackPoint : Form
     {
         List<TrackPoint> tPoint;
-        Main main;
+        Display main;
         //暂存
         TrackPoint tempTP = new TrackPoint();
-        public ModifyTrackPoint(Main _main)
+        public ModifyTrackPoint(Display _main)
         {
             tPoint = _main.tPoint;
             main = _main;

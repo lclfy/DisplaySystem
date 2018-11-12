@@ -19,7 +19,7 @@ using DisplaySystem.Model;
 
 namespace DisplaySystem
 {
-    public partial class Main : Form
+    public partial class Display : Form
     {
         public List<PowerSupplyModel> psModel;
         public List<TrackLine> tLine;
@@ -42,7 +42,7 @@ namespace DisplaySystem
         bool leftFlag = false;
         bool checkSignalAndPS = false;
 
-        public Main()
+        public Display()
         {
             InitializeComponent();
         }

@@ -12,8 +12,8 @@ namespace DisplaySystem.Modify
     public partial class ModifySignal : Form
     {
         List<Signal> signal;
-        Main main;
-        public ModifySignal(Main _main)
+        Display main;
+        public ModifySignal(Display _main)
         {
             signal = _main.signal;
             main = _main;

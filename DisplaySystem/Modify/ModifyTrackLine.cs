@@ -15,8 +15,8 @@ namespace DisplaySystem
         TrackPoint tempLPoint = new TrackPoint();
         TrackPoint tempRPoint = new TrackPoint();
 
-        Main main;
-        public ModifyTrackLine(Main _main)
+        Display main;
+        public ModifyTrackLine(Display _main)
         {
             tLine = _main.tLine;
             tPoint = _main.tPoint;

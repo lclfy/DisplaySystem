@@ -16,8 +16,8 @@ namespace DisplaySystem.Modify
         List<TrackPoint> tPoint;
         List<Signal> signal;
 
-        Main main;
-        public ModifyPowerSupplyModel(Main _main)
+        Display main;
+        public ModifyPowerSupplyModel(Display _main)
         {
             main = _main;
             psModel = _main.psModel;

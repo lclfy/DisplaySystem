@@ -8,6 +8,7 @@ namespace DisplaySystem.Model
     class ModelData
     {
         public string title { get; set; }
+        public int stationPosition { get; set; }
         public int startTrackNum { get; set; }
         public int stopTrackNum { get; set; }
         public List<TrackLine> tLine { get; set; }
@@ -17,6 +18,7 @@ namespace DisplaySystem.Model
         public ModelData()
         {
             title = "";
+            stationPosition = -1;
             startTrackNum = -1;
             stopTrackNum = -1;
             tLine = new List<TrackLine>();

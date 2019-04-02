@@ -16,6 +16,7 @@ using System.Runtime.Serialization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using DisplaySystem.Model;
+using System.Configuration;
 
 namespace DisplaySystem
 {
@@ -26,8 +27,10 @@ namespace DisplaySystem
         public List<TrackPoint> tPoint;
         public List<Signal> signal;
         public List<Button> allButtons;
+        List<FileInfo> modelFile = new List<FileInfo>();
         Graphics graphic;
         bool pointShown = false;
+        string currentStation = "";
         bool allPointsShown = false;
         bool showSettings = false;
         bool showFunctionalPoints = true;
@@ -35,6 +38,7 @@ namespace DisplaySystem
         public List<string> shownPowerSupplyModelName = new List<string>();
         int startTrackNum = 0;
         int stopTrackNum = 0;
+        int stationPosition = 960;
         float zoomCount = 1;
         Point mouseOff = new Point();
         public Point movingPixels = new Point();
@@ -49,16 +53,62 @@ namespace DisplaySystem
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            LookFile();
+            loadSettings();
+            if (modelFile.Count == 0)
+            {
+                loadData("");
+            }
+            else
+            {
+                loadData(currentStation);
+                fileComboBox.SelectedItem = currentStation;
+                fileComboBox.SelectedValue = currentStation;
+            }
+            initUIWithData();
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
+            this.UpdateStyles();
+            this.AutoScrollMinSize = new Size(1920, 1080);
+        }
+
+        private void initUIWithData()
+        {
+            buttons_pnl.Controls.Clear();
             Controls.Remove(buttons_pnl);
-            loadData();
             checkEmptyObject();
             createButtons();
             checkSettings();
             checkResolution();
             RelocateButtons();
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
-            this.UpdateStyles();
-            this.AutoScrollMinSize = new Size(1920, 1080);
+        }
+
+        private void saveSettings()
+        {
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            config.Save();
+            if (config.AppSettings.Settings["currentSettings"] == null)
+            {
+                KeyValueConfigurationElement _k = new KeyValueConfigurationElement("currentSettings", title_lbl.Text.ToString());
+                config.AppSettings.Settings.Add(_k);
+            }
+            else
+            {
+                config.AppSettings.Settings["currentSettings"].Value = title_lbl.Text.ToString();
+            }
+            config.Save();
+            ConfigurationManager.RefreshSection("currentSettings");
+        }
+
+        private void loadSettings()
+        {
+            try
+            {
+                currentStation = ConfigurationManager.AppSettings["currentSettings"];
+            }
+            catch (Exception e)
+            {
+                currentStation = "";
+            }
         }
 
         private void checkResolution()
@@ -241,6 +291,10 @@ namespace DisplaySystem
                 for(int iPSPoint = 0;iPSPoint < psModel[iPS].containedTrackPoint.Count; iPSPoint++)
                 {
                     bool hasGotIt = false;
+                    if(psModel[iPS].containedTrackPoint[iPSPoint].trackPointName == null)
+                    {
+                        psModel[iPS].containedTrackPoint[iPSPoint].trackPointName = psModel[iPS].containedTrackPoint[iPSPoint].trackPointID.ToString();
+                    }
                     foreach (TrackPoint _tp in tPoint)
                     {
                         if (psModel[iPS].containedTrackPoint[iPSPoint].trackPointID.Equals(_tp.trackPointID))
@@ -311,6 +365,8 @@ namespace DisplaySystem
                 label3.Visible = true;
                 startTrackNum_tb.Visible = true;
                 stopTrackNum_tb.Visible = true;
+                stationPosition_lbl.Visible = true;
+                stationPosition_tb.Visible = true;
             }
             else
             {
@@ -330,16 +386,46 @@ namespace DisplaySystem
                 label3.Visible = false;
                 startTrackNum_tb.Visible = false;
                 stopTrackNum_tb.Visible = false;
+                stationPosition_lbl.Visible = false;
+                stationPosition_tb.Visible = false;
             }
         }
 
-        private void loadData()
+        public void LookFile(string extraPath = "")
+        {//0名单 1题库
+            string startPath = "data";
+            string pathname = Application.StartupPath + "\\" + startPath + "\\" + extraPath;
+            if (pathname.Trim().Length == 0)//判断文件名不为空
+            {
+                return;
+            }
+            DirectoryInfo _dir = new DirectoryInfo(pathname);
+            FileInfo[] fileInfos;
+            try
+            {
+                fileInfos = _dir.GetFiles();
+                foreach (FileInfo _file in fileInfos)
+                {
+                    if (Path.GetExtension(_file.Name).Equals(".bin"))
+                    {
+                        modelFile.Add(_file);
+                        fileComboBox.Items.Add(_file.Name.Split('.')[0]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+        private void loadData(string selectedFile)
         {
             IFormatter formatter = new BinaryFormatter();
             ModelData _data = new ModelData();
             try
             {
-                Stream stream = new FileStream(Application.StartupPath + "\\Data\\modelData.bin", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                Stream stream = new FileStream(Application.StartupPath+"\\Data\\"+ selectedFile + ".bin", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 _data = (ModelData)formatter.Deserialize(stream);
                 stream.Close();
             }
@@ -349,6 +435,7 @@ namespace DisplaySystem
             }
             try
             {
+                tPoint = new List<TrackPoint>();
                 tPoint = _data.tPoint;
             }
             catch(Exception e)
@@ -357,6 +444,7 @@ namespace DisplaySystem
             }
             try
             {
+                psModel = new List<PowerSupplyModel>();
                 psModel = _data.psModel;
             }
             catch(Exception e)
@@ -372,6 +460,7 @@ namespace DisplaySystem
             }
             try
             {
+                tLine = new List<TrackLine>();
                 tLine = _data.tLine;
             }
             catch (Exception e)
@@ -380,6 +469,7 @@ namespace DisplaySystem
             }
             try
             {
+                signal = new List<Signal>();
                 signal = _data.signal;
             }
             catch (Exception e)
@@ -397,6 +487,15 @@ namespace DisplaySystem
             {
                 title_tb.Text = _data.title;
                 title_lbl.Text = _data.title;
+            }
+            if(_data.stationPosition != -1)
+            {
+                stationPosition_tb.Text = _data.stationPosition.ToString();
+                stationPosition = _data.stationPosition;
+            }
+            else
+            {
+                stationPosition_tb.Text = stationPosition.ToString();
             }
             if(_data.startTrackNum != 0)
             {
@@ -467,6 +566,20 @@ namespace DisplaySystem
         
         private void createButtons()
         {
+            if(allButtons == null)
+            {
+                allButtons = new List<Button>();
+            }
+            if (allButtons.Count != 0)
+            {
+                foreach (Button _removedBtn in allButtons)
+                {
+                    if (this.Controls.Contains(_removedBtn))
+                    {
+                        this.Controls.Remove(_removedBtn);
+                    }
+                }
+            }
             allButtons = new List<Button>();
             int count = 0;
             foreach(PowerSupplyModel _ps in psModel)
@@ -550,6 +663,7 @@ namespace DisplaySystem
             DialogResult result = MessageBox.Show("是否关闭程序？已做的修改将被保存。", "提示信息", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
             if (result == DialogResult.OK)
             {
+                saveSettings();
                 saveData();
                 e.Cancel = false;  //点击OK   
             }
@@ -570,11 +684,21 @@ namespace DisplaySystem
             _dt.psModel = this.psModel;
             _dt.signal = this.signal;
             _dt.title = title_lbl.Text;
+            _dt.stationPosition = stationPosition;
             
             try
             {
                 IFormatter formatter = new BinaryFormatter();
-                Stream stream = new FileStream(Application.StartupPath + "\\Data\\modelData.bin", FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
+                string path = title_lbl.Text.ToString();
+                if(path.Length == 0)
+                {
+                    path = "modelData.bin";
+                }
+                else
+                {
+                    path = path + ".bin";
+                }
+                Stream stream = new FileStream(Application.StartupPath + "\\Data\\" + path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
                 formatter.Serialize(stream, _dt);
                 stream.Close();
                 /*
@@ -636,8 +760,8 @@ namespace DisplaySystem
             }
             if (startTrackNum <= _tl.trackLineID && _tl.trackLineID <= stopTrackNum )
             {
-                //真正的站台字符画中间
-                graphic.DrawString(pointText, font, Brushes.White, transformScreenOffsets(((1920 /2)-20),true), transformScreenOffsets((((point1.Y + point2.Y) / 2) - 20),false));
+                //真正的站台字符画中间（或者设置的位置）
+                graphic.DrawString(pointText, font, Brushes.White, transformScreenOffsets((stationPosition-20),true), transformScreenOffsets((((point1.Y + point2.Y) / 2) - 20),false));
                 hasGotIt = true;
             }
             if(startTrackNum == 0 && stopTrackNum == 0)
@@ -988,7 +1112,9 @@ namespace DisplaySystem
             label2.Location = new Point(16, this.Height - 375);
             title_tb.Location = new Point(16, this.Height - 405);
             label1.Location = new Point(16, this.Height - 430);
-            title_lbl.Location = new Point((this.Width / 2)-(title_lbl.Text.Length*35), 30);  
+            title_lbl.Location = new Point((this.Width / 2)-(title_lbl.Text.Length*35), 30);
+            stationPosition_tb.Location = new Point(16, this.Height - 455);
+            stationPosition_lbl.Location = new Point(16, this.Height - 480);
         }
 
         private void findMouseMovingSignalAndPS(int mouseX, int mouseY)
@@ -1215,6 +1341,31 @@ namespace DisplaySystem
             lastMovingPlace.Y = 0;
             movingPixels.X = 0;
             movingPixels.Y = 0;
+        }
+
+        private void fileComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            loadData(fileComboBox.SelectedItem.ToString());
+            initUIWithData();
+            currentStation = title_lbl.Text.ToString();
+        }
+
+        private void stationPosition_tb_TextChanged(object sender, EventArgs e)
+        {
+            int _tempStationPosition = -1;
+            int.TryParse(stationPosition_tb.Text.ToString(),out _tempStationPosition);
+            if(_tempStationPosition != -1)
+            {
+                stationPosition = _tempStationPosition;
+            }
+        }
+
+        private void stationPosition_tb_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar != 8 && !Char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
         }
     }
 }

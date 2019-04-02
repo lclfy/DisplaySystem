@@ -488,7 +488,7 @@ namespace DisplaySystem
                 title_tb.Text = _data.title;
                 title_lbl.Text = _data.title;
             }
-            if(_data.stationPosition != -1)
+            if(_data.stationPosition != -1 || _data.stationPosition != 0)
             {
                 stationPosition_tb.Text = _data.stationPosition.ToString();
                 stationPosition = _data.stationPosition;

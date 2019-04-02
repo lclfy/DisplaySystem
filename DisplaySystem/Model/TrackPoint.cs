@@ -9,7 +9,7 @@ namespace DisplaySystem
     public class TrackPoint : IComparable<TrackPoint> , ICloneable
     {
         public int trackPointID { get; set; }
-        //是否为信号机
+        public string trackPointName { get; set; }
         public bool function { get; set; }
         //  1定位 2反位
         public int switchDirection { get; set; }
@@ -19,6 +19,11 @@ namespace DisplaySystem
         public int firstTrackLine { get; set; }
        public int secondTrackLine { get; set; }
         public int thirdTrackLine { get; set; }
+
+        public TrackPoint()
+        {
+            trackPointName = "";
+        }
 
         public int CompareTo(TrackPoint other)
         {
@@ -34,6 +39,7 @@ namespace DisplaySystem
         {
             TrackPoint _tp = new TrackPoint();
             _tp.trackPointID = trackPointID;
+            _tp.trackPointName = trackPointName;
             _tp.function = function;
             _tp.switchDirection = switchDirection;
             _tp.trackPoint = trackPoint;

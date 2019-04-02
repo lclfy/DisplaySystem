@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Display));
             this.modifyTrackLine_btn = new System.Windows.Forms.Button();
             this.modifyTrackPoint_btn = new System.Windows.Forms.Button();
             this.modifyPowerSupplyModel_btn = new System.Windows.Forms.Button();
@@ -56,10 +57,10 @@
             // 
             // modifyTrackLine_btn
             // 
-            this.modifyTrackLine_btn.Location = new System.Drawing.Point(14, 354);
-            this.modifyTrackLine_btn.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.modifyTrackLine_btn.Location = new System.Drawing.Point(28, 708);
+            this.modifyTrackLine_btn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.modifyTrackLine_btn.Name = "modifyTrackLine_btn";
-            this.modifyTrackLine_btn.Size = new System.Drawing.Size(80, 23);
+            this.modifyTrackLine_btn.Size = new System.Drawing.Size(160, 46);
             this.modifyTrackLine_btn.TabIndex = 0;
             this.modifyTrackLine_btn.Text = "轨道";
             this.modifyTrackLine_btn.UseVisualStyleBackColor = true;
@@ -67,10 +68,10 @@
             // 
             // modifyTrackPoint_btn
             // 
-            this.modifyTrackPoint_btn.Location = new System.Drawing.Point(14, 325);
-            this.modifyTrackPoint_btn.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.modifyTrackPoint_btn.Location = new System.Drawing.Point(28, 650);
+            this.modifyTrackPoint_btn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.modifyTrackPoint_btn.Name = "modifyTrackPoint_btn";
-            this.modifyTrackPoint_btn.Size = new System.Drawing.Size(80, 23);
+            this.modifyTrackPoint_btn.Size = new System.Drawing.Size(160, 46);
             this.modifyTrackPoint_btn.TabIndex = 1;
             this.modifyTrackPoint_btn.Text = "道岔";
             this.modifyTrackPoint_btn.UseVisualStyleBackColor = true;
@@ -78,10 +79,10 @@
             // 
             // modifyPowerSupplyModel_btn
             // 
-            this.modifyPowerSupplyModel_btn.Location = new System.Drawing.Point(14, 267);
-            this.modifyPowerSupplyModel_btn.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.modifyPowerSupplyModel_btn.Location = new System.Drawing.Point(28, 534);
+            this.modifyPowerSupplyModel_btn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.modifyPowerSupplyModel_btn.Name = "modifyPowerSupplyModel_btn";
-            this.modifyPowerSupplyModel_btn.Size = new System.Drawing.Size(80, 23);
+            this.modifyPowerSupplyModel_btn.Size = new System.Drawing.Size(160, 46);
             this.modifyPowerSupplyModel_btn.TabIndex = 2;
             this.modifyPowerSupplyModel_btn.Text = "供电臂";
             this.modifyPowerSupplyModel_btn.UseVisualStyleBackColor = true;
@@ -95,10 +96,10 @@
             // 
             // save_btn
             // 
-            this.save_btn.Location = new System.Drawing.Point(14, 210);
-            this.save_btn.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.save_btn.Location = new System.Drawing.Point(28, 420);
+            this.save_btn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.save_btn.Name = "save_btn";
-            this.save_btn.Size = new System.Drawing.Size(80, 23);
+            this.save_btn.Size = new System.Drawing.Size(160, 46);
             this.save_btn.TabIndex = 3;
             this.save_btn.Text = "保存";
             this.save_btn.UseVisualStyleBackColor = true;
@@ -112,10 +113,10 @@
             // 
             // showPoint_btn
             // 
-            this.showPoint_btn.Location = new System.Drawing.Point(14, 238);
-            this.showPoint_btn.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.showPoint_btn.Location = new System.Drawing.Point(28, 476);
+            this.showPoint_btn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.showPoint_btn.Name = "showPoint_btn";
-            this.showPoint_btn.Size = new System.Drawing.Size(80, 23);
+            this.showPoint_btn.Size = new System.Drawing.Size(160, 46);
             this.showPoint_btn.TabIndex = 4;
             this.showPoint_btn.Text = "显/隐坐标";
             this.showPoint_btn.UseVisualStyleBackColor = true;
@@ -123,18 +124,18 @@
             // 
             // buttons_pnl
             // 
-            this.buttons_pnl.Location = new System.Drawing.Point(104, 768);
-            this.buttons_pnl.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            this.buttons_pnl.Location = new System.Drawing.Point(208, 1536);
+            this.buttons_pnl.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.buttons_pnl.Name = "buttons_pnl";
-            this.buttons_pnl.Size = new System.Drawing.Size(1702, 172);
+            this.buttons_pnl.Size = new System.Drawing.Size(3404, 344);
             this.buttons_pnl.TabIndex = 5;
             // 
             // setting_btn
             // 
-            this.setting_btn.Location = new System.Drawing.Point(14, 383);
-            this.setting_btn.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.setting_btn.Location = new System.Drawing.Point(28, 766);
+            this.setting_btn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.setting_btn.Name = "setting_btn";
-            this.setting_btn.Size = new System.Drawing.Size(80, 23);
+            this.setting_btn.Size = new System.Drawing.Size(160, 46);
             this.setting_btn.TabIndex = 6;
             this.setting_btn.Text = "编辑模式";
             this.setting_btn.UseVisualStyleBackColor = true;
@@ -146,20 +147,20 @@
             this.title_lbl.AutoSize = true;
             this.title_lbl.Font = new System.Drawing.Font("微软雅黑", 42F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.title_lbl.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.title_lbl.Location = new System.Drawing.Point(608, 17);
-            this.title_lbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.title_lbl.Location = new System.Drawing.Point(1216, 34);
+            this.title_lbl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.title_lbl.Name = "title_lbl";
-            this.title_lbl.Size = new System.Drawing.Size(0, 75);
+            this.title_lbl.Size = new System.Drawing.Size(0, 146);
             this.title_lbl.TabIndex = 7;
             this.title_lbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // title_tb
             // 
             this.title_tb.Font = new System.Drawing.Font("微软雅黑", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.title_tb.Location = new System.Drawing.Point(14, 154);
-            this.title_tb.Margin = new System.Windows.Forms.Padding(2);
+            this.title_tb.Location = new System.Drawing.Point(28, 308);
+            this.title_tb.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.title_tb.Name = "title_tb";
-            this.title_tb.Size = new System.Drawing.Size(81, 23);
+            this.title_tb.Size = new System.Drawing.Size(158, 39);
             this.title_tb.TabIndex = 8;
             this.title_tb.TextChanged += new System.EventHandler(this.title_tb_TextChanged);
             // 
@@ -168,19 +169,19 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label1.Location = new System.Drawing.Point(10, 137);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Location = new System.Drawing.Point(20, 274);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 14);
+            this.label1.Size = new System.Drawing.Size(68, 28);
             this.label1.TabIndex = 9;
             this.label1.Text = "标题";
             // 
             // modifySignal_btn
             // 
-            this.modifySignal_btn.Location = new System.Drawing.Point(14, 296);
-            this.modifySignal_btn.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.modifySignal_btn.Location = new System.Drawing.Point(28, 592);
+            this.modifySignal_btn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.modifySignal_btn.Name = "modifySignal_btn";
-            this.modifySignal_btn.Size = new System.Drawing.Size(80, 23);
+            this.modifySignal_btn.Size = new System.Drawing.Size(160, 46);
             this.modifySignal_btn.TabIndex = 10;
             this.modifySignal_btn.Text = "信号机";
             this.modifySignal_btn.UseVisualStyleBackColor = true;
@@ -191,20 +192,20 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label2.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label2.Location = new System.Drawing.Point(10, 171);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Location = new System.Drawing.Point(20, 342);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(63, 14);
+            this.label2.Size = new System.Drawing.Size(124, 28);
             this.label2.TabIndex = 11;
             this.label2.Text = "站台范围";
             // 
             // startTrackNum_tb
             // 
             this.startTrackNum_tb.Font = new System.Drawing.Font("微软雅黑", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.startTrackNum_tb.Location = new System.Drawing.Point(15, 190);
-            this.startTrackNum_tb.Margin = new System.Windows.Forms.Padding(2);
+            this.startTrackNum_tb.Location = new System.Drawing.Point(30, 380);
+            this.startTrackNum_tb.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.startTrackNum_tb.Name = "startTrackNum_tb";
-            this.startTrackNum_tb.Size = new System.Drawing.Size(30, 23);
+            this.startTrackNum_tb.Size = new System.Drawing.Size(56, 39);
             this.startTrackNum_tb.TabIndex = 12;
             this.startTrackNum_tb.Text = "0";
             this.startTrackNum_tb.TextChanged += new System.EventHandler(this.startTrackNum_tb_TextChanged);
@@ -215,20 +216,20 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label3.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label3.Location = new System.Drawing.Point(48, 190);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Location = new System.Drawing.Point(96, 380);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(14, 14);
+            this.label3.Size = new System.Drawing.Size(26, 28);
             this.label3.TabIndex = 13;
             this.label3.Text = "-";
             // 
             // stopTrackNum_tb
             // 
             this.stopTrackNum_tb.Font = new System.Drawing.Font("微软雅黑", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.stopTrackNum_tb.Location = new System.Drawing.Point(63, 190);
-            this.stopTrackNum_tb.Margin = new System.Windows.Forms.Padding(2);
+            this.stopTrackNum_tb.Location = new System.Drawing.Point(126, 380);
+            this.stopTrackNum_tb.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.stopTrackNum_tb.Name = "stopTrackNum_tb";
-            this.stopTrackNum_tb.Size = new System.Drawing.Size(32, 23);
+            this.stopTrackNum_tb.Size = new System.Drawing.Size(60, 39);
             this.stopTrackNum_tb.TabIndex = 14;
             this.stopTrackNum_tb.Text = "0";
             this.stopTrackNum_tb.TextChanged += new System.EventHandler(this.stopTrackNum_tb_TextChanged);
@@ -237,9 +238,10 @@
             // zoomIn_btn
             // 
             this.zoomIn_btn.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.zoomIn_btn.Location = new System.Drawing.Point(14, 49);
+            this.zoomIn_btn.Location = new System.Drawing.Point(28, 98);
+            this.zoomIn_btn.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.zoomIn_btn.Name = "zoomIn_btn";
-            this.zoomIn_btn.Size = new System.Drawing.Size(40, 39);
+            this.zoomIn_btn.Size = new System.Drawing.Size(80, 78);
             this.zoomIn_btn.TabIndex = 15;
             this.zoomIn_btn.Text = "+";
             this.zoomIn_btn.UseVisualStyleBackColor = true;
@@ -248,9 +250,10 @@
             // zoomOut_btn
             // 
             this.zoomOut_btn.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.zoomOut_btn.Location = new System.Drawing.Point(60, 49);
+            this.zoomOut_btn.Location = new System.Drawing.Point(120, 98);
+            this.zoomOut_btn.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.zoomOut_btn.Name = "zoomOut_btn";
-            this.zoomOut_btn.Size = new System.Drawing.Size(40, 39);
+            this.zoomOut_btn.Size = new System.Drawing.Size(80, 78);
             this.zoomOut_btn.TabIndex = 16;
             this.zoomOut_btn.Text = "-";
             this.zoomOut_btn.UseVisualStyleBackColor = true;
@@ -261,19 +264,20 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label4.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label4.Location = new System.Drawing.Point(12, 17);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Location = new System.Drawing.Point(24, 34);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(70, 14);
+            this.label4.Size = new System.Drawing.Size(138, 28);
             this.label4.TabIndex = 17;
             this.label4.Text = "放大/缩小";
             // 
             // resetPlace_btn
             // 
             this.resetPlace_btn.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.resetPlace_btn.Location = new System.Drawing.Point(115, 49);
+            this.resetPlace_btn.Location = new System.Drawing.Point(230, 98);
+            this.resetPlace_btn.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.resetPlace_btn.Name = "resetPlace_btn";
-            this.resetPlace_btn.Size = new System.Drawing.Size(77, 39);
+            this.resetPlace_btn.Size = new System.Drawing.Size(154, 78);
             this.resetPlace_btn.TabIndex = 18;
             this.resetPlace_btn.Text = "重置位置";
             this.resetPlace_btn.UseVisualStyleBackColor = true;
@@ -283,8 +287,9 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(0, 0);
+            this.label5.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(41, 12);
+            this.label5.Size = new System.Drawing.Size(82, 24);
             this.label5.TabIndex = 19;
             this.label5.Text = "label5";
             // 
@@ -293,20 +298,20 @@
             this.mousePoint_lbl.AutoSize = true;
             this.mousePoint_lbl.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.mousePoint_lbl.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.mousePoint_lbl.Location = new System.Drawing.Point(10, 100);
-            this.mousePoint_lbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.mousePoint_lbl.Location = new System.Drawing.Point(20, 200);
+            this.mousePoint_lbl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.mousePoint_lbl.Name = "mousePoint_lbl";
-            this.mousePoint_lbl.Size = new System.Drawing.Size(49, 14);
+            this.mousePoint_lbl.Size = new System.Drawing.Size(96, 28);
             this.mousePoint_lbl.TabIndex = 20;
             this.mousePoint_lbl.Text = "当前：";
             // 
-            // Main
+            // Display
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(842, 427);
+            this.ClientSize = new System.Drawing.Size(1684, 854);
             this.Controls.Add(this.mousePoint_lbl);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.resetPlace_btn);
@@ -329,9 +334,10 @@
             this.Controls.Add(this.modifyTrackPoint_btn);
             this.Controls.Add(this.modifyTrackLine_btn);
             this.ForeColor = System.Drawing.Color.Black;
-            this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.Name = "Main";
-            this.Text = "Form1";
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.Name = "Display";
+            this.Text = "郑州东站供电臂防错办卡控";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.Main_Scroll);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Main_Paint);

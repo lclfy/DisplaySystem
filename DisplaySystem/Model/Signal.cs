@@ -14,6 +14,12 @@ namespace DisplaySystem.Model
         public int signalDir { get; set; }
         public string tip { get; set; }
 
+        public Signal()
+        {
+            signalID = "";
+            signalPoint = new Point();
+        }
+
         public object Clone()
         {
             Signal _sg = new Signal();

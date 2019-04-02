@@ -158,9 +158,17 @@ namespace DisplaySystem
 
             
         
-            //检查点里面有没有无用线
+            //检查点里面有没有无用线(和空白名称的点)
             for(int iPoint  = 0;iPoint <tPoint.Count; iPoint++)
             {
+                if(tPoint[iPoint].trackPointName == null)
+                {
+                    tPoint[iPoint].trackPointName = "";
+                }
+                if(tPoint[iPoint].trackPointName.Length == 0)
+                {
+                    tPoint[iPoint].trackPointName = tPoint[iPoint].trackPointID.ToString();
+                }
                 bool firstGotIt = false;
                 bool secondGotIt = false;
                 bool thirdGotIt = false;
@@ -661,7 +669,8 @@ namespace DisplaySystem
             Font font = new Font("微软雅黑", 10.0f, FontStyle.Bold);
             Font font1 = new Font("微软雅黑", 8.0f, FontStyle.Bold);
             Font fontPoint = new Font("微软雅黑", 7.0f, FontStyle.Bold);
-            string lineText = _tp.trackPointID.ToString();
+            //            string lineText = _tp.trackPointID.ToString();
+            string lineText = _tp.trackPointName.ToString();
             Pen p;
                 if (isOnShow)
                 {

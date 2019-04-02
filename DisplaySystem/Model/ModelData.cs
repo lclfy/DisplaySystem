@@ -14,5 +14,16 @@ namespace DisplaySystem.Model
         public List<TrackPoint> tPoint { get; set; }
         public List<PowerSupplyModel> psModel { get; set; }
         public List<Signal> signal { get; set; }
+        public ModelData()
+        {
+            title = "";
+            startTrackNum = -1;
+            stopTrackNum = -1;
+            tLine = new List<TrackLine>();
+            tPoint = new List<TrackPoint>();
+            psModel = new List<PowerSupplyModel>();
+            signal = new List<Signal>();
+        }
+
     }
 }

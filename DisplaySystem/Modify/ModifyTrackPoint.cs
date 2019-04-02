@@ -34,6 +34,7 @@ namespace DisplaySystem.Modify
             foreach(TrackPoint _tPoint in tPoint)
             {
                 ListViewItem lvi = new ListViewItem(_tPoint.trackPointID.ToString());
+                lvi.SubItems.Add(_tPoint.trackPointName.ToString());
                 lvi.SubItems.Add(_tPoint.trackPoint.ToString());
                 lvi.SubItems.Add(_tPoint.firstTrackLine.ToString());
                 lvi.SubItems.Add(_tPoint.secondTrackLine.ToString());
@@ -116,6 +117,7 @@ namespace DisplaySystem.Modify
                     {//新建
                         TrackPoint _tp = new TrackPoint();
                         _tp.trackPointID = int.Parse(id_tb.Text.ToString());
+                        _tp.trackPointName = name_tb.Text.ToString();
                         _tp.trackPoint = new Point(int.Parse(x_tb.Text), int.Parse(y_tb.Text));
                         _tp.firstTrackLine = int.Parse(p1_tb.Text.ToString());
                         _tp.secondTrackLine = int.Parse(p2_tb.Text.ToString());
@@ -128,6 +130,7 @@ namespace DisplaySystem.Modify
                     {//编辑
                         TrackPoint _tp = new TrackPoint();
                         _tp.trackPointID = int.Parse(id_tb.Text.ToString());
+                        _tp.trackPointName = name_tb.Text.ToString();
                         _tp.trackPoint = new Point(int.Parse(x_tb.Text), int.Parse(y_tb.Text));
                         _tp.firstTrackLine = int.Parse(p1_tb.Text.ToString());
                         _tp.secondTrackLine = int.Parse(p2_tb.Text.ToString());
@@ -158,6 +161,14 @@ namespace DisplaySystem.Modify
             {
                 _tempTP.trackPointID = int.Parse(id_tb.Text.ToString());
             }
+            if (name_tb.Text.Length != 0)
+            {
+                _tempTP.trackPointName = name_tb.Text.ToString();
+            }
+            else
+            {
+                _tempTP.trackPointName = id_tb.Text.ToString();
+            }
             if (x_tb.Text.Length != 0 && y_tb.Text.Length != 0)
             {
                 _tempTP.trackPoint = new Point(int.Parse(x_tb.Text.ToString()), int.Parse(y_tb.Text.ToString()) );
@@ -179,18 +190,15 @@ namespace DisplaySystem.Modify
 
         private void loadTempData()
         {
-            if (tempTP.trackPointID != null)
+            id_tb.Text = tempTP.trackPointID.ToString();
+            if (tempTP.trackPointName.Length != 0)
             {
-                id_tb.Text = tempTP.trackPointID.ToString();
+                name_tb.Text = tempTP.trackPointName.ToString();
             }
             if (tempTP.trackPoint != null)
             {
                 x_tb.Text = tempTP.trackPoint.X.ToString();
                 y_tb.Text = tempTP.trackPoint.Y.ToString();
-            }
-            if (tempTP.firstTrackLine != 0)
-            {
-                p1_tb.Text = tempTP.firstTrackLine.ToString();
             }
             if (tempTP.secondTrackLine != 0)
             {
@@ -205,6 +213,7 @@ namespace DisplaySystem.Modify
         private void removeText()
         {
             id_tb.Text = "";
+            name_tb.Text = "";
             x_tb.Text = "";
             y_tb.Text = "";
             p1_tb.Text = "";
@@ -220,6 +229,7 @@ namespace DisplaySystem.Modify
                 saveTempData();
                 TrackPoint _tp = tPoint[TrackPointListView.SelectedItems[0].Index];
                 id_tb.Text = _tp.trackPointID.ToString();
+                name_tb.Text = _tp.trackPointName.ToString();
                 x_tb.Text = _tp.trackPoint.X.ToString();
                 y_tb.Text = _tp.trackPoint.Y.ToString();
                 p1_tb.Text = _tp.firstTrackLine.ToString();

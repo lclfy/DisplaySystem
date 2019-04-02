@@ -19,5 +19,15 @@ namespace DisplaySystem
         public List<Signal> functionalTrackPoint { get; set; }
         //供电范围
         public string powerSupplyRange { get; set; }
+
+        public PowerSupplyModel()
+        {
+            powerSupplyName = "";
+            containedTrackLine = new List<TrackLine>();
+            containedTrackPoint = new List<TrackPoint>();
+            functionalTrackPoint = new List<Signal>();
+            powerSupplyRange = "";
+
+        }
     }
 }

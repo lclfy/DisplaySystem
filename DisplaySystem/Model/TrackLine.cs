@@ -21,6 +21,18 @@ namespace DisplaySystem
         public string rightWayTo { get; set; }
         //该轨道在无电区内包含；0=全部，1=左半部，2=右半部
         public int containsInPS { get; set; }
+
+        public TrackLine()
+        {
+            trackText = "";
+            //左右坐标
+            selfLeftPoint = new Point();
+            selfRightPoint = new Point();
+            leftTrackPoint = new TrackPoint();
+            rightTrackPoint = new TrackPoint();
+            leftWayTo = "";
+            rightWayTo = "";
+        }
         public int CompareTo(TrackLine other)
         {
             if (null == other)

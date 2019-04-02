@@ -113,8 +113,15 @@ namespace DisplaySystem
                 signal = new List<Signal>();
             }
             for (int j = 0; j < tLine.Count; j++)
-            {//检查线里面有没有无用点
-
+            {//检查线里面有没有无用点(和线的名称)
+                if(tLine[j].trackText == null)
+                {
+                    tLine[j].trackText = "";
+                }
+                if(tLine[j].trackText.Length == 0)
+                {
+                    tLine[j].trackText = tLine[j].trackLineID.ToString();
+                }
                 if (tLine[j].leftTrackPoint != null)
                 {
                     bool hasGotIt = false;
@@ -606,7 +613,8 @@ namespace DisplaySystem
             }
             Point point1 = _tl.selfLeftPoint;
             Point point2 = _tl.selfRightPoint;
-            String pointText = _tl.trackLineID.ToString();
+            //String pointText = _tl.trackLineID.ToString();
+            String pointText = _tl.trackText.ToString();
             Pen p = new Pen(Color.Gray, 3);
             graphic.DrawLine(p, transformScreenOffsets(point1.X,true), transformScreenOffsets(point1.Y,false), transformScreenOffsets(point2.X,true), transformScreenOffsets(point2.Y,false));
             Font font = new Font("微软雅黑", 10.0f, FontStyle.Bold);
